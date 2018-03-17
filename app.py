@@ -15,6 +15,9 @@ templates = web.template.render('templates')
 
 class recipe:
     def GET(self, name):
+        if name.lower() != name:
+            return web.redirect(name.lower())
+
         vars = {'url':name}
 
         recipe = db.select('recipes', where="url = $url", vars=vars).first()
