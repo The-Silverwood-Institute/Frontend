@@ -1,0 +1,17 @@
+$def with (recipe)
+<head>
+  <title>$recipe['name']</title>
+</head>
+<body>
+  <h1>$recipe['name']</h1>
+  <h2>Ingredients</h2>
+  <ul>
+  $for ingredient in recipe['ingredients']:
+    <li>$ingredient</li>
+  </ul>
+  <h2>Method</h2>
+  <ul>
+  $for step in recipe['method']:
+    <li>$step</li>
+  </ul>
+<body>
