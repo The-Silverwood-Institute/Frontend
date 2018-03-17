@@ -29,7 +29,8 @@ c.execute("INSERT INTO recipes VALUES ('Mushroom and parsnip rösti pie', 'mushr
 # Save (commit) the changes
 conn.commit()
 
-print 'Saved 4 recipes to the database'
+recipeCount = c.execute("SELECT COUNT(*) FROM recipes").fetchone()[0]
+print "Saved {} recipes to the database".format(recipeCount)
 
 # We can also close the connection if we are done with it.
 # Just be sure any changes have been committed or they will be lost.
