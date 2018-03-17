@@ -4,7 +4,7 @@ import os
 try:
     os.remove('recipes.db')
     print 'Deleted old recipes'
-except:
+except OSError:
     print 'No recipes to delete'
     pass
 
