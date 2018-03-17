@@ -14,7 +14,12 @@ $def with (recipe, recipeList)
     <span class="mdl-layout-title">Recibase</span>
     <nav class="mdl-navigation">
       $for listItem in recipeList:
-        <a class="mdl-navigation__link" href="$listItem['url']">$listItem['name']</a>
+        $code:
+          if listItem['url'] == recipe['url']:
+            itemClass = 'is-current'
+          else:
+            itemClass = ''
+        <a class="mdl-navigation__link $itemClass" href="$listItem['url']">$listItem['name']</a>
     </nav>
   </div>
   <main class="mdl-layout__content">
