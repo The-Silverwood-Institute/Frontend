@@ -1,17 +1,38 @@
-$def with (recipe)
+$def with (recipe, recipeList)
 <head>
   <title>$recipe['name']</title>
+
+   <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-deep_purple.min.css" />
+   <link rel="stylesheet" href="/static/styles.css" />
+   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+   <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
 </head>
-<body>
-  <h1>$recipe['name']</h1>
-  <h2>Ingredients</h2>
-  <ul>
-  $for ingredient in recipe['ingredients']:
-    <li>$ingredient</li>
-  </ul>
-  <h2>Method</h2>
-  <ul>
-  $for step in recipe['method']:
-    <li>$step</li>
-  </ul>
+
+<body class="mdl-color--grey-100 mdl-color-text--grey-700 mdl-base">
+<div class="mdl-layout mdl-js-layout mdl-layout--fixed-drawer">
+  <div class="mdl-layout__drawer">
+    <span class="mdl-layout-title">Recibase</span>
+    <nav class="mdl-navigation">
+      $for listItem in recipeList:
+        <a class="mdl-navigation__link" href="$recipe['url']">$recipe['name']</a>
+    </nav>
+  </div>
+  <main class="mdl-layout__content">
+    <section class="section--center mdl-grid mdl-grid--no-spacing">
+      <div class="mdl-cell mdl-cell--12-col">
+        <h2>$recipe['name']</h2>
+        <h3>Ingredients</h3>
+        <ul>
+        $for ingredient in recipe['ingredients']:
+          <li>$ingredient</li>
+        </ul>
+        <h3>Method</h3>
+        <ol>
+        $for step in recipe['method']:
+          <li>$step</li>
+        </ol>
+      </div>
+    </section>
+  </main>
+</div>
 <body>

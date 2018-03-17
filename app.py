@@ -22,7 +22,9 @@ class recipe:
         if recipe:
             recipe.ingredients = filter(notEmpty, recipe.ingredients.split("\n"))
             recipe.method = filter(notEmpty, recipe.method.split("\n"))
-            return templates.recipe(recipe)
+
+            recipeList = listRecipes(db)
+            return templates.recipe(recipe, recipeList)
         else:
             return web.notfound()
 
