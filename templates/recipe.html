@@ -14,7 +14,7 @@ $def with (recipe, recipeList)
     <span class="mdl-layout-title">Recibase</span>
     <nav class="mdl-navigation">
       $for listItem in recipeList:
-        <a class="mdl-navigation__link" href="$recipe['url']">$recipe['name']</a>
+        <a class="mdl-navigation__link" href="$listItem['url']">$listItem['name']</a>
     </nav>
   </div>
   <main class="mdl-layout__content">
