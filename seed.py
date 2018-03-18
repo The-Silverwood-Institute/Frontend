@@ -28,6 +28,9 @@ c.execute("INSERT INTO recipes VALUES ('Mushroom and parsnip rösti pie', 'mushr
 
 # c.execute("INSERT INTO recipes VALUES ('', '', '', '')")
 
+print 'Add index URL column'
+c.execute("CREATE UNIQUE INDEX recipes_urls ON recipes (url)")
+
 # Save (commit) the changes
 conn.commit()
 
