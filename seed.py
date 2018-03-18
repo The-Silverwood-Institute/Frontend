@@ -4,14 +4,16 @@
 import sqlite3
 import os
 
+DB_PATH = 'recipes.db'
+
 try:
-    os.remove('recipes.db')
+    os.remove(DB_PATH)
     print 'Deleted old recipes'
 except OSError:
     print 'No recipes to delete'
     pass
 
-conn = sqlite3.connect('recipes.db')
+conn = sqlite3.connect(DB_PATH)
 
 c = conn.cursor()
 
