@@ -4,4 +4,4 @@ def notEmpty(listItem):
 def listRecipes(db):
     recipeList = db.select('recipes', what="name, url", order="name")
 
-    return recipeList
+    return list(recipeList)

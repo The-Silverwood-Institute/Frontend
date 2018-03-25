@@ -11,6 +11,7 @@ urls = (
 app = web.application(urls, globals())
 
 db = web.database(dbn='sqlite', db='recipes.db')
+recipeList = listRecipes(db)
 templates = web.template.render('templates')
 
 class recipe:
@@ -26,7 +27,6 @@ class recipe:
             recipe.ingredients = filter(notEmpty, recipe.ingredients.split("\n"))
             recipe.method = filter(notEmpty, recipe.method.split("\n"))
 
-            recipeList = listRecipes(db)
             return templates.recipe(recipe, recipeList)
         else:
             return web.notfound()
