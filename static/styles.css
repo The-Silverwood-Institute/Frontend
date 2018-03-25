@@ -11,6 +11,10 @@ main > section {
   color: inherit;
 }
 
+.mdl-layout__drawer-button > i {
+  margin-top: 4px;
+}
+
 .mdl-navigation__link.is-current {
   background-color: #e0e0e0;
 }
