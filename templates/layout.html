@@ -1,0 +1,44 @@
+$def with (content)
+<head>
+  <title>$content.pageName • Recibase</title>
+
+   <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-deep_purple.min.css" />
+   <link rel="stylesheet" href="/static/styles.css" />
+   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+   <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+   <script defer src="/static/search.js"></script>
+</head>
+
+<body class="mdl-color--grey-100 mdl-color-text--grey-700 mdl-base">
+<div class="mdl-layout mdl-js-layout mdl-layout--fixed-drawer">
+  <div class="mdl-layout__drawer">
+    <span class="mdl-layout-title"><a href="/">Recibase</a></span>
+    <form id="searchForm">
+      <div class="mdl-textfield mdl-js-textfield">
+        <input class="mdl-textfield__input" type="text" id="search" autocomplete="off" disabled>
+        <label class="mdl-textfield__label" for="search">Search...</label>
+      </div>
+    </form>
+    <nav class="mdl-navigation">
+      $if 'recipeUrl' in content:
+        $ recipeUrl = content.recipeUrl
+      $else:
+        $ recipeUrl = ''
+      $for listItem in recipeList:
+        $code:
+          if listItem['url'] == recipeUrl:
+            itemClass = 'is-current'
+          else:
+            itemClass = ''
+        <a class="mdl-navigation__link $itemClass" href="$listItem['url']">$listItem['name']</a>
+    </nav>
+  </div>
+  <main class="mdl-layout__content">
+    <section class="section--center mdl-grid">
+      <div class="mdl-cell mdl-cell--12-col">
+        $:content
+      </div>
+    </section>
+  </main>
+</div>
+<body>

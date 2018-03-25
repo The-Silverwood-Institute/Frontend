@@ -6,6 +6,11 @@ main > section {
   max-width: 1080px;
 }
 
+.mdl-layout-title > a {
+  text-decoration: none;
+  color: inherit;
+}
+
 .mdl-navigation__link.is-current {
   background-color: #e0e0e0;
 }

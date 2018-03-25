@@ -6,13 +6,17 @@ if not os.path.isfile('recipes.db'):
     raise ValueError('Recipes database (recipes.db) not found')
 
 urls = (
+    '/', 'homepage',
     '/(.*)', 'recipe'
 )
 app = web.application(urls, globals())
 
 db = web.database(dbn='sqlite', db='recipes.db')
-recipeList = listRecipes(db)
-templates = web.template.render('templates')
+templates = web.template.render('templates/', base='layout', globals={'recipeList':listRecipes(db)})
+
+class homepage:
+    def GET(self):
+        return templates.home()
 
 class recipe:
     def GET(self, name):
@@ -27,7 +31,7 @@ class recipe:
             recipe.ingredients = filter(notEmpty, recipe.ingredients.split("\n"))
             recipe.method = filter(notEmpty, recipe.method.split("\n"))
 
-            return templates.recipe(recipe, recipeList)
+            return templates.recipe(recipe)
         else:
             return web.notfound()
 
