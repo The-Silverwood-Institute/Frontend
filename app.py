@@ -14,6 +14,10 @@ app = web.application(urls, globals())
 db = web.database(dbn='sqlite', db='recipes.db')
 templates = web.template.render('templates/', base='layout', globals={'recipeList':listRecipes(db)})
 
+def notfound():
+    return web.notfound(templates.notfound())
+app.notfound = notfound
+
 class homepage:
     def GET(self):
         return templates.home()
@@ -33,7 +37,7 @@ class recipe:
 
             return templates.recipe(recipe)
         else:
-            return web.notfound()
+            raise web.notfound()
 
 if __name__ == "__main__":
     app.run()
