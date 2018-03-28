@@ -16,6 +16,10 @@ templates = web.template.render('templates/', base='layout', globals={'recipeLis
 
 def notfound():
     return web.notfound(templates.notfound())
+def internalerror():
+    return web.internalerror(templates.internalerror())
+
+app.internalerror = internalerror
 app.notfound = notfound
 
 class homepage:
