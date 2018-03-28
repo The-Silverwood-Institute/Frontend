@@ -19,8 +19,9 @@ def notfound():
 def internalerror():
     return web.internalerror(templates.internalerror())
 
-app.internalerror = internalerror
 app.notfound = notfound
+if not web.config.debug:
+    app.internalerror = internalerror
 
 class homepage:
     def GET(self):
