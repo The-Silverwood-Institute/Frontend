@@ -37,6 +37,7 @@ class recipe:
         recipe = db.select('recipes', where="url = $url", vars=vars).first()
 
         if recipe:
+            recipe.notes = filter(notEmpty, recipe.notes.split("\n"))
             recipe.ingredients = filter(notEmpty, recipe.ingredients.split("\n"))
             recipe.method = filter(notEmpty, recipe.method.split("\n"))
 

@@ -12,3 +12,7 @@ $for ingredient in recipe['ingredients']:
 $for step in recipe['method']:
   <li>$step</li>
 </ol>
+$if recipe['notes']:
+  <h3>Notes</h3>
+  $for note in recipe['notes']:
+    <p>$note</p>
