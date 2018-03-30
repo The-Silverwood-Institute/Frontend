@@ -1,4 +1,7 @@
-def notEmpty(listItem):
+def toList(newlineSeparated):
+    return filter(_notEmpty, newlineSeparated.split('\n'))
+
+def _notEmpty(listItem):
     return len(listItem) != 0
 
 def listRecipes(db):
