@@ -15,6 +15,10 @@ main > section {
   margin-top: 4px;
 }
 
+.mdl-navigation.mdl-navigation .mdl-navigation__link {
+  padding: 10px 40px;
+}
+
 .mdl-navigation__link.is-current {
   background-color: #e0e0e0;
 }
