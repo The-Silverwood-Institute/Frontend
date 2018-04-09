@@ -2,6 +2,7 @@ $def with (recipe)
 $var pageName: $recipe['name']
 $var recipeUrl: $recipe['url']
 <h2>$recipe['name']</h2>
+$recipe['description']
 <h3>Ingredients</h3>
 <ul>
 $for ingredient in recipe['ingredients']:
