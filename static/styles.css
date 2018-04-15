@@ -34,3 +34,17 @@ main > section {
 .mdl-layout__drawer .mdl-navigation {
   padding-top: 0px;
 }
+
+#fork-me {
+  display: none;
+}
+
+@media (min-width : 1024px) {
+  #fork-me {
+    display: block;
+    position: absolute;
+    top: 0;
+    right: 0;
+    border: 0;
+  }
+}
