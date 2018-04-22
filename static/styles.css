@@ -34,3 +34,9 @@ main > section {
 .mdl-layout__drawer .mdl-navigation {
   padding-top: 0px;
 }
+
+@media (min-width: 1025px) {
+  section.mdl-grid {
+    padding-left: 20px;
+  }
+}
