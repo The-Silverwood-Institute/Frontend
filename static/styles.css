@@ -6,6 +6,14 @@ main > section {
   max-width: 1080px;
 }
 
+h2 {
+  margin-bottom: 10px;
+}
+
+.description {
+  margin-top: 16px;
+}
+
 .mdl-layout-title > a {
   text-decoration: none;
   color: inherit;

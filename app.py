@@ -40,7 +40,7 @@ class recipe:
             recipe.notes = toList(recipe.notes)
             recipe.ingredients = toList(recipe.ingredients)
             recipe.method = toList(recipe.method)
-
+            print recipe.description
             return templates.recipe(recipe)
         else:
             raise web.notfound()
