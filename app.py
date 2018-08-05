@@ -38,7 +38,7 @@ class recipe:
 
         if recipe:
             recipe.notes = toList(recipe.notes)
-            recipe.ingredients = toList(recipe.ingredients)
+            recipe.ingredients = db.select('ingredients', where="recipeUrl = $url", vars=vars)
             recipe.method = toList(recipe.method)
             print recipe.description
             return templates.recipe(recipe)

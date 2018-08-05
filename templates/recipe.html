@@ -9,7 +9,12 @@ $if recipe['description']:
 <h3>Ingredients</h3>
 <ul>
 $for ingredient in recipe['ingredients']:
-  <li>$ingredient</li>
+  $code:
+    quantity = (": "  + ingredient['quantity']) if ingredient['quantity'] else ""
+    prep = (", " + ingredient['prep']) if ingredient['prep'] else ""
+    notes = (" (" + ingredient['notes'] + " )") if ingredient['notes'] else ""
+    ingredientText = ingredient['name'] + quantity + prep + notes
+  <li>$ingredientText</li>
 </ul>
 <h3>Method</h3>
 <ol>
