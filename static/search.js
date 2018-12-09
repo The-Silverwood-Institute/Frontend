@@ -3,18 +3,14 @@ var searchForm = document.getElementById("searchForm");
 var menuItems = Array.from(document.getElementsByClassName("mdl-navigation__link"));
 var searchTimer;
 
-searchElement.addEventListener("keyup", startSearchTimer);
-searchElement.addEventListener("keydown", cancelSearchTimer);
+searchElement.addEventListener("input", resetSearchTimer);
 searchForm.addEventListener("submit", onSearchSubmit);
 
 searchElement.disabled = false;
 
-function startSearchTimer() {
-  searchTimer = setTimeout(filterRecipes, 20);
-}
-
-function cancelSearchTimer() {
+function resetSearchTimer() {
   clearTimeout(searchTimer);
+  searchTimer = setTimeout(filterRecipes, 20);
 }
 
 function filterRecipes() {
@@ -30,7 +26,7 @@ function filterRecipes() {
 
 function onSearchSubmit(e) {
   e.preventDefault();
-  cancelSearchTimer();
+  clearTimeout(searchTimer);
   filterRecipes();
 
   visibleMenuItems = document.querySelectorAll(".mdl-navigation__link:not([hidden])");
