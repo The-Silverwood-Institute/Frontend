@@ -1,18 +1,17 @@
 import web
-import os.path
-from helpers import *
-
-if not os.path.isfile('recipes.db'):
-    raise ValueError('Recipes database (recipes.db) not found')
+import os
+import requests
 
 urls = (
     '/', 'homepage',
     '/(.*)', 'recipe'
 )
 app = web.application(urls, globals())
+backendBaseUrl = os.getenv('BACKEND_URL', "http://localhost:8081/")
 
-db = web.database(dbn='sqlite', db='recipes.db')
-templates = web.template.render('templates/', base='layout', globals={'recipeList':listRecipes(db)})
+recipeList = requests.get(backendBaseUrl + 'recipes/').json()
+
+templates = web.template.render('templates/', base='layout', globals={'recipeList':recipeList})
 
 def notfound():
     return web.notfound(templates.notfound())
@@ -32,15 +31,11 @@ class recipe:
         if name.lower() != name:
             return web.redirect(name.lower())
 
-        vars = {'url':name}
+        recipe = requests.get(backendBaseUrl + 'recipes/' + name).json()
 
-        recipe = db.select('recipes', where="url = $url", vars=vars).first()
+        print(recipe)
 
         if recipe:
-            recipe.notes = toList(recipe.notes)
-            recipe.ingredients = db.select('ingredients', where="recipeUrl = $url", vars=vars)
-            recipe.method = toList(recipe.method)
-            print recipe.description
             return templates.recipe(recipe)
         else:
             raise web.notfound()
