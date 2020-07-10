@@ -1,5 +1,9 @@
-main {
-  background-color: white;
+body.mdl-base {
+  background-color: white !important;
+}
+
+.mdl-layout {
+    background: none !important;
 }
 
 main > section {
@@ -43,19 +47,20 @@ h2 {
   padding-top: 0px;
 }
 
-#fork-me {
-  display: none;
+footer {
+  margin-top: .5rem;
+  text-align: center;
+}
+
+footer a:last-child {
+  margin: .5rem;
+}
+
+footer a:not(:hover) {
+  color: grey;
 }
 
 @media (min-width: 1025px) {
-  #fork-me {
-    display: block;
-    position: absolute;
-    top: 0;
-    right: 0;
-    border: 0;
-  }
-
   section.mdl-grid {
     padding-left: 20px;
   }

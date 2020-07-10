@@ -9,9 +9,12 @@ urls = (
 app = web.application(urls, globals())
 backendBaseUrl = os.getenv('BACKEND_URL', "http://localhost:8081/")
 
-recipeList = requests.get(backendBaseUrl + 'recipes/').json()
-
-templates = web.template.render('templates/', base='layout', globals={'recipeList':recipeList})
+globals = {
+    'recipeList': requests.get(backendBaseUrl + 'recipes/').json(),
+    'frontendVersion': os.getenv('SOURCE_VERSION', 'latest'),
+    'apiVersion': requests.get(backendBaseUrl + 'manifest').json()['version']
+}
+templates = web.template.render('templates/', base='layout', globals=globals)
 
 def notfound():
     return web.notfound(templates.notfound())
