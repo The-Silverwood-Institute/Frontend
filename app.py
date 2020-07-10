@@ -31,12 +31,10 @@ class recipe:
         if name.lower() != name:
             return web.redirect(name.lower())
 
-        recipe = requests.get(backendBaseUrl + 'recipes/' + name).json()
+        response = requests.get(backendBaseUrl + 'recipes/' + name)
 
-        print(recipe)
-
-        if recipe:
-            return templates.recipe(recipe)
+        if response.status_code == 200:
+            return templates.recipe(response.json())
         else:
             raise web.notfound()
 
