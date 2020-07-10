@@ -11,7 +11,7 @@ backendBaseUrl = os.getenv('BACKEND_URL', "http://localhost:8081/")
 
 globals = {
     'recipeList': requests.get(backendBaseUrl + 'recipes/').json(),
-    'frontendVersion': os.getenv('SOURCE_VERSION', 'latest'),
+    'frontendVersion': os.getenv('HEROKU_SLUG_COMMIT', 'latest'),
     'apiVersion': requests.get(backendBaseUrl + 'manifest').json()['version']
 }
 templates = web.template.render('templates/', base='layout', globals=globals)
