@@ -1,8 +1,7 @@
 var searchElement = document.getElementById("search");
 var searchForm = document.getElementById("searchForm");
 var menuItems = Array.from(document.getElementsByClassName("mdl-navigation__link"));
-var localSearchTimer;
-var apiSearchTimer;
+var searchTimer;
 
 searchElement.addEventListener("input", resetSearchTimer);
 searchForm.addEventListener("submit", onSearchSubmit);
@@ -10,17 +9,44 @@ searchForm.addEventListener("submit", onSearchSubmit);
 searchElement.disabled = false;
 
 function resetSearchTimer() {
-  clearTimeout(localSearchTimer);
-  clearTimeout(apiSearchTimer);
+  clearTimeout(searchTimer);
 
-  localSearchTimer = setTimeout(localFilterRecipes, 20);
-  apiSearchTimer = setTimeout(apiFilterRecipes, 100); // Queries an API so shouldn't fire as often
+  localSearchTimer = setTimeout(searchRecipes, 40);
 }
 
-function localFilterRecipes() {
-  var searchTerm = searchElement.value.toLowerCase();
-  menuItems.forEach(function(menuItem) {
-    if (menuItem.text.toLowerCase().includes(searchTerm)) {
+function searchRecipes() {
+  const searchTerm = searchElement.value;
+
+  const dispatchEventId = searchTimer;
+  const params = new URLSearchParams({
+    "hasIngredient": searchTerm
+  });
+
+  // TODO: Make API URL dynamic
+  return fetch('https://recibase-api.herokuapp.com/recipes/?' + params.toString())
+    .then(resp => resp.json())
+    .then(json => {
+      if (dispatchEventId != searchTimer) {
+        console.log('Discarding outdated results');
+        return;
+      }
+
+      return new Set(json.map(recipe => recipe['url']));
+    })
+    .then(
+      urls => filterRecipes(searchTerm, urls),
+      () => filterRecipes(searchTerm)
+    );
+}
+
+function filterRecipes(searchTerm, urls) {
+  urls = (typeof urls !== 'undefined') ? urls : new Set([]);
+
+  menuItems.forEach(menuItem => {
+    const match = menuItem.text.toLowerCase().includes(searchTerm.toLowerCase())
+                    || urls.has(menuItem.getAttribute('href'));
+
+    if (match) {
       menuItem.hidden = false;
     } else {
       menuItem.hidden = true;
@@ -28,34 +54,11 @@ function localFilterRecipes() {
   });
 }
 
-function apiFilterRecipes() {
-  const dispatchEventId = apiSearchTimer;
-
-  const params = new URLSearchParams({
-    "hasIngredient": searchElement.value
-  });
-
-  return fetch('https://recibase-api.herokuapp.com/recipes/?' + params.toString())
-    .then(resp => resp.json())
-    .then(json => {
-      if (dispatchEventId != apiSearchTimer) {
-        console.log('Discarding outdated results');
-        return;
-      }
-
-      const recipeUrls = new Set(json.map(recipe => recipe['url']));
-
-      menuItems.filter(item => recipeUrls.has(item.getAttribute('href'))).forEach(item => item.hidden = false);
-    });
-}
-
 function onSearchSubmit(e) {
   e.preventDefault();
-  clearTimeout(localSearchTimer);
-  clearTimeout(apiSearchTimer);
+  clearTimeout(searchTimer);
 
-  localFilterRecipes();
-  apiFilterRecipes().finally(() => {
+  searchRecipes().finally(() => {
     visibleMenuItems = document.querySelectorAll(".mdl-navigation__link:not([hidden])");
 
     if (visibleMenuItems.length == 1) {
