@@ -40,5 +40,8 @@ class recipe:
         else:
             raise web.notfound()
 
+app.notfound = notfound
+app.internalerror = internalerror
+
 if __name__ == "__main__":
     app.run()
