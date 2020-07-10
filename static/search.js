@@ -1,7 +1,7 @@
-var searchElement = document.getElementById("search");
-var searchForm = document.getElementById("searchForm");
-var menuItems = Array.from(document.getElementsByClassName("mdl-navigation__link"));
-var searchTimer;
+const searchElement = document.getElementById("search");
+const searchForm = document.getElementById("searchForm");
+const menuItems = Array.from(document.getElementsByClassName("mdl-navigation__link"));
+let searchTimer;
 
 searchElement.addEventListener("input", resetSearchTimer);
 searchForm.addEventListener("submit", onSearchSubmit);
