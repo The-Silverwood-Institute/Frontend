@@ -29,7 +29,7 @@ function searchRecipes() {
     "hasIngredient": searchTerm
   });
 
-  return fetch(apiUrl + '/recipes/?' + params.toString())
+  return fetch(`${apiUrl}recipes/?${params.toString()}`)
     .then(resp => resp.json())
     .then(json => {
       if (dispatchEventId != searchTimer) {
