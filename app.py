@@ -48,7 +48,11 @@ class recipe:
 
 class sitemap:
     def GET(self):
-        return plainTemplates.sitemap(web.ctx.home)
+        # Force HTTPS if running in Heroku
+        # https://github.com/The-Silverwood-Institute/Frontend/issues/9#issuecomment-660707019
+        protocol = "https" if "HEROKU_SLUG_COMMIT" in os.environ else web.ctx.protocol
+        appUrl = protocol + "://" + web.ctx.host
+        return plainTemplates.sitemap(appUrl)
 
 class manifest:
     def GET(self):
