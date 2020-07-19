@@ -2,11 +2,18 @@ const searchElement = document.getElementById("search");
 const searchForm = document.getElementById("searchForm");
 const menuItems = Array.from(document.getElementsByClassName("mdl-navigation__link"));
 let searchTimer;
+let apiUrl;
 
 searchElement.addEventListener("input", resetSearchTimer);
 searchForm.addEventListener("submit", onSearchSubmit);
 
-searchElement.disabled = false;
+fetch('/manifest.json')
+  .then(resp => resp.json())
+  .then(json => {
+    apiUrl = json['apiUrl'];
+
+    searchElement.disabled = false;
+  });
 
 function resetSearchTimer() {
   clearTimeout(searchTimer);
@@ -22,8 +29,7 @@ function searchRecipes() {
     "hasIngredient": searchTerm
   });
 
-  // TODO: Make API URL dynamic
-  return fetch('https://recibase-api.herokuapp.com/recipes/?' + params.toString())
+  return fetch(apiUrl + '/recipes/?' + params.toString())
     .then(resp => resp.json())
     .then(json => {
       if (dispatchEventId != searchTimer) {

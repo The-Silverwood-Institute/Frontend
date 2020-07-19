@@ -1,18 +1,21 @@
 import web
 import os
+import json
 import requests
 
 urls = (
     '/', 'homepage',
     '/sitemap.xml', 'sitemap',
+    '/manifest.json', 'manifest',
     '/(.*)', 'recipe'
 )
 app = web.application(urls, globals())
 backendBaseUrl = os.getenv('BACKEND_URL', "http://localhost:8081/")
+frontendVersion = os.getenv('HEROKU_SLUG_COMMIT', 'latest')
 
 globals = {
     'recipeList': requests.get(backendBaseUrl + 'recipes/').json(),
-    'frontendVersion': os.getenv('HEROKU_SLUG_COMMIT', 'latest'),
+    'frontendVersion': frontendVersion,
     'apiVersion': requests.get(backendBaseUrl + 'manifest').json()['version']
 }
 templates = web.template.render('templates/', base='layout', globals=globals)
@@ -46,6 +49,16 @@ class recipe:
 class sitemap:
     def GET(self):
         return plainTemplates.sitemap(web.ctx.home)
+
+class manifest:
+    def GET(self):
+        appInfo = {
+            'version': frontendVersion,
+            'apiUrl': backendBaseUrl
+        }
+
+        web.header('Content-Type', 'text/json')
+        return json.dumps(appInfo)
 
 app.notfound = notfound
 app.internalerror = internalerror
