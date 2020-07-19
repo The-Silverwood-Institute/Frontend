@@ -4,6 +4,7 @@ import requests
 
 urls = (
     '/', 'homepage',
+    '/sitemap.xml', 'sitemap',
     '/(.*)', 'recipe'
 )
 app = web.application(urls, globals())
@@ -15,6 +16,7 @@ globals = {
     'apiVersion': requests.get(backendBaseUrl + 'manifest').json()['version']
 }
 templates = web.template.render('templates/', base='layout', globals=globals)
+plainTemplates = web.template.render('templates/', globals=globals)
 
 def notfound():
     return web.notfound(templates.notfound())
@@ -40,6 +42,10 @@ class recipe:
             return templates.recipe(response.json())
         else:
             raise web.notfound()
+
+class sitemap:
+    def GET(self):
+        return plainTemplates.sitemap(web.ctx.home)
 
 app.notfound = notfound
 app.internalerror = internalerror
