@@ -9,10 +9,12 @@ $def with (content)
   <script defer src="/static/search.js?v=$frontendVersion"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  $if 'image' in content:
-    <meta property="og:image" content="$content.image.src">
-    <meta property="og:image:width" content="$content.image.width">
-    <meta property="og:image:height" content="$content.image.height">
+  $if 'imageSrc' in content:
+    <meta property="og:image" content="$content.imageSrc">
+  $if 'imageWidth' in content:
+    <meta property="og:image:width" content="$content.imageWidth">
+  $if 'imageHeight' in content:
+    <meta property="og:image:height" content="$content.imageHeight">
 </head>
 
 <body class="mdl-color--grey-100 mdl-color-text--grey-700 mdl-base">
