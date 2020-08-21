@@ -76,8 +76,5 @@ class manifest:
         web.header('Content-Type', 'text/json')
         return json.dumps(appInfo)
 
-app.notfound = notfound
-app.internalerror = internalerror
-
 if __name__ == "__main__":
     app.run()
