@@ -1,6 +1,31 @@
 $def with (content)
+<!DOCTYPE html>
+<html lang="en">
 <head>
+  <meta charset="utf-8">
   <title>$content.pageName • Recibase</title>
+
+  <meta name="author" content="The Silverwood Institute">
+
+  $if 'pageDescription' in content and content.pageDescription:
+    <meta name="description" content="$content.pageDescription">
+    <meta property="og:description" content="$content.pageDescription">
+  $else:
+    <meta name="description" content="Kit and Alex's curated recipe collection. Mostly vegetarian, all delicious">
+    <meta property="og:description" content="Kit and Alex's curated recipe collection. Mostly vegetarian, all delicious">
+
+  $if 'imageSrc' in content and content.imageSrc:
+    <meta name="twitter:card" content="summary_large_image">
+  $else:
+    <meta name="twitter:card" content="summary">
+
+  <meta name="twitter:site" content="@kittsville">
+  <meta property="og:title" content="$content.pageName">
+  <meta property="og:site_name" content="Recibase">
+  <meta property="og:type" content="website">
+
+  $if 'pagePath' in content:
+    <meta property="og:url" content="https://reciba.se/$content.pagePath">
 
   <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-deep_purple.min.css" />
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
@@ -9,11 +34,11 @@ $def with (content)
   <script defer src="/static/search.js?v=$frontendVersion"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  $if 'imageSrc' in content:
+  $if 'imageSrc' in content and content.imageSrc:
     <meta property="og:image" content="$content.imageSrc">
-  $if 'imageWidth' in content:
+  $if 'imageWidth' in content and content.imageWidth:
     <meta property="og:image:width" content="$content.imageWidth">
-  $if 'imageHeight' in content:
+  $if 'imageHeight' in content and content.imageHeight:
     <meta property="og:image:height" content="$content.imageHeight">
 </head>
 
