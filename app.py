@@ -3,13 +3,18 @@ import os
 import json
 import requests
 
+class DerpApplication(web.application):
+    def handle(self):
+        print(web.ctx.host)
+        return web.application.handle(self)
+
 urls = (
     '/', 'homepage',
     '/sitemap.xml', 'sitemap',
     '/manifest.json', 'manifest',
     '/(.*)', 'recipe'
 )
-app = web.application(urls, globals())
+app = DerpApplication(urls, globals())
 backendBaseUrl = os.getenv('BACKEND_URL', "http://localhost:8081/")
 frontendVersion = os.getenv('HEROKU_SLUG_COMMIT', 'latest')
 
