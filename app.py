@@ -3,10 +3,17 @@ import os
 import json
 import requests
 
-class DerpApplication(web.application):
+class AppWithHerokuRedirect(web.application):
+    # Based on:
+    # https://github.com/tylerwilliams/visualizer2/blob/9615392efce05f9cafab32629acd9561e4dbc45c/server/visualizer_server.py#L200
     def handle(self):
-        print(web.ctx.host)
-        return web.application.handle(self)
+        if web.ctx.host == "recibase.herokuapp.com":
+            print('Redirecting naked Heroku domain')
+            web.ctx.status = "301 Moved Permanently"
+            web.ctx.headers.append(('Location', 'https://reciba.se' + web.ctx.fullpath))
+            return None
+        else:
+            return web.application.handle(self)
 
 urls = (
     '/', 'homepage',
@@ -14,7 +21,7 @@ urls = (
     '/manifest.json', 'manifest',
     '/(.*)', 'recipe'
 )
-app = DerpApplication(urls, globals())
+app = AppWithHerokuRedirect(urls, globals())
 backendBaseUrl = os.getenv('BACKEND_URL', "http://localhost:8081/")
 frontendVersion = os.getenv('HEROKU_SLUG_COMMIT', 'latest')
 
