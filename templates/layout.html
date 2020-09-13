@@ -3,13 +3,14 @@ $def with (content)
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>$content.pageName • Recibase</title>
+
+  <title>$:content.pageName • Recibase</title>
 
   <meta name="author" content="The Silverwood Institute">
 
   $if 'pageDescription' in content and content.pageDescription:
-    <meta name="description" content="$content.pageDescription">
-    <meta property="og:description" content="$content.pageDescription">
+    <meta name="description" content="$:content.pageDescription">
+    <meta property="og:description" content="$:content.pageDescription">
   $else:
     <meta name="description" content="Kit and Alex's curated recipe collection. Mostly vegetarian, all delicious">
     <meta property="og:description" content="Kit and Alex's curated recipe collection. Mostly vegetarian, all delicious">
@@ -20,7 +21,7 @@ $def with (content)
     <meta name="twitter:card" content="summary">
 
   <meta name="twitter:site" content="@kittsville">
-  <meta property="og:title" content="$content.pageName">
+  <meta property="og:title" content="$:content.pageName">
   <meta property="og:site_name" content="Recibase">
   <meta property="og:type" content="website">
 
@@ -63,7 +64,7 @@ $def with (content)
             itemClass = 'is-current'
           else:
             itemClass = ''
-        <a class="mdl-navigation__link $itemClass" href="$listItem['url']">$listItem['name']</a>
+        <a class="mdl-navigation__link $itemClass" href="$listItem['url']">$:listItem['name']</a>
     </nav>
   </div>
   <main class="mdl-layout__content">
