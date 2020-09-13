@@ -30,4 +30,7 @@ $for step in recipe['method']:
 </ol>
 $if recipe['notes']:
   <h3>Notes</h3>
-    <p>$recipe['notes']</p>
+    $code:
+      notes = filter(lambda note: len(note.strip()) > 0, recipe['notes'].split('\n'))
+    $for note in notes:
+      <p>$note</p>
