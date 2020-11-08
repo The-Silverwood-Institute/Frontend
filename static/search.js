@@ -22,7 +22,7 @@ function resetSearchTimer() {
 }
 
 function searchRecipes() {
-  const searchTerm = searchElement.value;
+  const searchTerm = searchElement.value.trim();
 
   const dispatchEventId = searchTimer;
   const params = new URLSearchParams({
