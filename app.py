@@ -1,6 +1,7 @@
 import web
 import os
 import json
+import random
 import requests
 
 class AppWithHerokuRedirect(web.application):
@@ -19,6 +20,7 @@ urls = (
     '/', 'homepage',
     '/sitemap.xml', 'sitemap',
     '/manifest.json', 'manifest',
+    '/random', 'randomRecipe',
     '/(.*)', 'recipe'
 )
 app = AppWithHerokuRedirect(urls, globals())
@@ -45,6 +47,10 @@ if not web.config.debug:
 class homepage:
     def GET(self):
         return templates.home()
+
+class randomRecipe:
+    def GET(self):
+        return web.found(random.choice(globals['recipeList'])['url'])
 
 class recipe:
     def GET(self, name):

@@ -14,11 +14,22 @@ h2 {
   margin-bottom: 10px;
 }
 
+.random-recipe {
+  width: 24px;
+  position: absolute;
+  top: 18px;
+  right: 25px;
+}
+
 .description {
   margin-top: 16px;
 }
 
-.mdl-layout-title > a {
+.mdl-layout-title {
+  display: inline;
+}
+
+.mdl-layout-title > a, .random-recipe a {
   text-decoration: none;
   color: inherit;
 }
