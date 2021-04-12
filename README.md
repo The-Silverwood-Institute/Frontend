@@ -6,7 +6,7 @@ Recibase's frontend uses [web.py][webpy].
 
 ## Requirements
 
-- Python 2.7
+- Python 3.9
 - pip
 
 ## Installation
