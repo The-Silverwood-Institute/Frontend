@@ -15,7 +15,7 @@ $if recipe['tagline']:
 $if recipe['description']:
   <p class="description">$recipe['description']</p>
 <h3>Ingredients</h3>
-<ul>
+<ul class="ingredients">
 $for ingredient in recipe['ingredients']:
   $code:
     quantity = (": "  + ingredient['quantity']) if ingredient['quantity'] else ""
@@ -23,7 +23,7 @@ $for ingredient in recipe['ingredients']:
     notes = (" (" + ingredient['notes'] + ")") if ingredient['notes'] else ""
     ingredientText = ingredient['name'] + quantity + prep + notes
     is_scaled = 'scaled' if 'scaled' in ingredient and ingredient['scaled'] == True else ''
-  <li class="$is_scaled">$ingredientText</li>
+  <li><span class="$is_scaled">$ingredientText</span></li>
 </ul>
 <h3>Method</h3>
 <ol>

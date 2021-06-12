@@ -38,6 +38,17 @@ class TestGetScaleFactor:
         assert scaler.get_scale_factor(TestGetScaleFactor.make_param('1000')) == None
 
 class TestScaleIngredient:
+    @staticmethod
+    def make_ingredient(quantity):
+        ingredient = {
+            'name' : 'Onion',
+            'prep': 'chopped',
+            'notes': None,
+            'quantity': quantity
+        }
+
+        return ingredient
+
     def test_ignore_ingredients_with_no_quantity(self):
         ingredient = {'name': 'Onion', 'quantity': None}
         assert scaler.scale_ingredient(ingredient, 2) == {'name': 'Onion', 'quantity': None}
@@ -47,3 +58,14 @@ class TestScaleIngredient:
         scaled_ingredient = scaler.scale_ingredient(ingredient, 2)
         assert scaled_ingredient['quantity'] == '4'
         assert scaled_ingredient['scaled'] == True
+
+    def test_scale_ingredient_with_suffix(self):
+        assert scaler.scale_ingredient(
+            TestScaleIngredient.make_ingredient('4g'),
+            2
+        ) == TestScaleIngredient.make_ingredient('8g')
+
+        assert scaler.scale_ingredient(
+            TestScaleIngredient.make_ingredient('2 tbsp'),
+            2
+        ) == TestScaleIngredient.make_ingredient('4 tbsp')
