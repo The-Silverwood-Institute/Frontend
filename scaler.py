@@ -14,7 +14,7 @@ def get_scale_factor(req_params):
     if scale == 1 or scale == 0:
         return None
 
-    if scale > 50:
+    if scale > 50 or scale < 0:
         return None
 
     return scale

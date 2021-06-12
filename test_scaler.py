@@ -26,11 +26,13 @@ class TestGetScaleFactor:
         assert scaler.get_scale_factor(TestGetScaleFactor.make_param('.5')) == 0.5
         assert scaler.get_scale_factor(TestGetScaleFactor.make_param('1.5')) == 1.5
 
-    def test_ignore_pointless_scale(self):
+    def test_ignore_silly_scale(self):
         assert scaler.get_scale_factor(TestGetScaleFactor.make_param('1')) == None
         assert scaler.get_scale_factor(TestGetScaleFactor.make_param('0')) == None
         assert scaler.get_scale_factor(TestGetScaleFactor.make_param('1.0')) == None
         assert scaler.get_scale_factor(TestGetScaleFactor.make_param('0.0')) == None
+        assert scaler.get_scale_factor(TestGetScaleFactor.make_param('-1')) == None
+        assert scaler.get_scale_factor(TestGetScaleFactor.make_param('-1.0')) == None
 
     def test_ignore_large_scales(self):
         assert scaler.get_scale_factor(TestGetScaleFactor.make_param('50')) == 50
