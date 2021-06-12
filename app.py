@@ -3,6 +3,7 @@ import os
 import json
 import random
 import requests
+import scaler
 
 class AppWithHerokuRedirect(web.application):
     # Based on:
@@ -60,7 +61,13 @@ class recipe:
         response = requests.get(backendBaseUrl + 'recipes/' + name)
 
         if response.status_code == 200:
-            return templates.recipe(response.json())
+            recipe = response.json()
+
+            scale_factor = scaler.get_scale_factor(web.input())
+            if scale_factor:
+                recipe['ingredients'] = list(map(lambda i: scaler.scale_ingredient(i, scale_factor), recipe['ingredients']))
+
+            return templates.recipe(recipe)
         else:
             raise web.notfound()
 
