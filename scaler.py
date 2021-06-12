@@ -19,7 +19,7 @@ def get_scale_factor(req_params):
 
     return scale
 
-quantity_parser = re.compile('^([0-9]+)(\s{0,1}[a-z]+){0,1}$', re.IGNORECASE)
+quantity_parser = re.compile('^([0-9]+)( {0,1}[a-z]+){0,1}$', re.IGNORECASE)
 
 def scale_ingredient(ingredient, factor):
     if ingredient['quantity'] is None:
