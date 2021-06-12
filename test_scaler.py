@@ -43,12 +43,18 @@ class TestScaleIngredient:
     @staticmethod
     def make_ingredient(quantity):
         ingredient = {
-            'name' : 'Onion',
-            'prep': 'chopped',
-            'notes': None,
-            'quantity': quantity
+            'name'     : 'Onion',
+            'prep'     : 'chopped',
+            'notes'    : None,
+            'quantity' : quantity
         }
 
+        return ingredient
+
+    @staticmethod
+    def make_scaled_ingredient(quantity):
+        ingredient = TestScaleIngredient.make_ingredient(quantity)
+        ingredient['scaled'] = True
         return ingredient
 
     def test_ignore_ingredients_with_no_quantity(self):
@@ -62,12 +68,12 @@ class TestScaleIngredient:
         assert scaled_ingredient['scaled'] == True
 
     def test_scale_ingredient_with_suffix(self):
-        assert scaler.scale_ingredient(
-            TestScaleIngredient.make_ingredient('4g'),
-            2
-        ) == TestScaleIngredient.make_ingredient('8g')
+        ingredient        = TestScaleIngredient.make_ingredient('4g')
+        scaled_ingredient = TestScaleIngredient.make_scaled_ingredient('8g')
 
-        assert scaler.scale_ingredient(
-            TestScaleIngredient.make_ingredient('2 tbsp'),
-            2
-        ) == TestScaleIngredient.make_ingredient('4 tbsp')
+        assert scaler.scale_ingredient(ingredient, 2) == scaled_ingredient
+
+        ingredient        = TestScaleIngredient.make_ingredient('2 tbsp')
+        scaled_ingredient = TestScaleIngredient.make_scaled_ingredient('4 tbsp')
+
+        assert scaler.scale_ingredient(ingredient, 2) == scaled_ingredient
