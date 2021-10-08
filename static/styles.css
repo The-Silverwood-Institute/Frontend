@@ -71,10 +71,6 @@ footer {
   text-align: center;
 }
 
-footer a:last-child {
-  margin: .5rem;
-}
-
 footer a:not(:hover) {
   color: grey;
 }
