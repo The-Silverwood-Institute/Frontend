@@ -4,6 +4,13 @@ const menuItems = Array.from(document.getElementsByClassName("mdl-navigation__li
 let searchTimer;
 let apiUrl;
 
+class OutdatedSearchResult extends Error {
+  constructor(searchTerm, options) {
+    super(`Outdated search result for '${searchTerm}' returned by API`, options);
+  }
+}
+
+
 searchElement.addEventListener("input", resetSearchTimer);
 searchForm.addEventListener("submit", onSearchSubmit);
 
@@ -18,7 +25,7 @@ fetch('/manifest.json')
 function resetSearchTimer() {
   clearTimeout(searchTimer);
 
-  localSearchTimer = setTimeout(searchRecipes, 40);
+  searchTimer = setTimeout(searchRecipes, 40);
 }
 
 function searchRecipes() {
@@ -33,21 +40,24 @@ function searchRecipes() {
     .then(resp => resp.json())
     .then(json => {
       if (dispatchEventId != searchTimer) {
-        console.log('Discarding outdated results');
-        return;
+        throw new OutdatedSearchResult(searchTerm);
       }
 
       return new Set(json.map(recipe => recipe['url']));
     })
     .then(
       urls => filterRecipes(searchTerm, urls),
-      () => filterRecipes(searchTerm)
+      err  => {
+        if (err instanceof OutdatedSearchResult) {
+          console.log(err);
+        } else {
+          throw err;
+        }
+      }
     );
 }
 
 function filterRecipes(searchTerm, urls) {
-  urls = (typeof urls !== 'undefined') ? urls : new Set([]);
-
   menuItems.forEach(menuItem => {
     const match = menuItem.text.toLowerCase().includes(searchTerm.toLowerCase())
                     || urls.has(menuItem.getAttribute('href'));
