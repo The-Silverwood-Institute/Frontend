@@ -119,7 +119,12 @@ class FractionQuantity:
     def __str__(self):
         remainder = self.quantity.numerator // self.quantity.denominator
 
-        if remainder and self.quantity.numerator == self.quantity.denominator:
+        if self.quantity.denominator > 10:
+            return '{:.2f}{}'.format(
+                float(self.quantity),
+                format_suffix(self.suffix)
+            )
+        elif remainder and self.quantity.numerator == self.quantity.denominator:
             return '{}{}'.format(
                 remainder,
                 format_suffix(self.suffix)
