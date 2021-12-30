@@ -100,6 +100,12 @@ class TestScaleIngredient:
 
         assert scaler.scale_ingredient(ingredient, 5) == scaled_ingredient
 
+    def test_scale_fractional_ingredient_to_int(self):
+        ingredient        = TestScaleIngredient.make_ingredient('1/2')
+        scaled_ingredient = TestScaleIngredient.make_scaled_ingredient('1')
+
+        assert scaler.scale_ingredient(ingredient, 2) == scaled_ingredient
+
     def test_scale_ingredient_with_uneven_fraction_with_suffix(self):
         ingredient        = TestScaleIngredient.make_ingredient('1/4 tsp')
         scaled_ingredient = TestScaleIngredient.make_scaled_ingredient('1 1/4 tsp')

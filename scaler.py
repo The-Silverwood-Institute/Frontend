@@ -119,7 +119,12 @@ class FractionQuantity:
     def __str__(self):
         remainder = self.quantity.numerator // self.quantity.denominator
 
-        if remainder:
+        if remainder and self.quantity.numerator == self.quantity.denominator:
+            return '{}{}'.format(
+                remainder,
+                format_suffix(self.suffix)
+            )
+        elif remainder:
             even_fraction = self.quantity - remainder
 
             return '{} {}/{}{}'.format(
