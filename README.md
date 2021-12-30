@@ -13,6 +13,8 @@ Recibase's frontend uses [web.py][webpy].
 
 `pip install -r requirements.txt`
 
+Test with `pytest`
+
 ## Usage
 
 ### To start
