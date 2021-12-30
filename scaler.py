@@ -50,7 +50,49 @@ class SimpleQuantity:
         if self.quantity % 1 == 0:
             return '{:d}{}'.format(int(self.quantity), format_suffix(self.suffix))
         else:
-            return '{:.2f}{}'.format(scaled_ingredient, format_suffix(self.suffix))
+            return '{:.2f}{}'.format(scaled_ingredient, format_suffix(self.suffix)) # Fixme
+
+class RangeQuantity:
+    parser = re.compile('^([0-9]+)-([0-9]+)( {0,1}[a-z]+){0,1}$', re.IGNORECASE)
+
+    @staticmethod
+    def parse(raw_quantity):
+        match = RangeQuantity.parser.match(raw_quantity)
+
+        if match:
+            lower_quantity  = int(match.group(1))
+            upper_quantity  = int(match.group(2))
+            suffix          = match.group(3)
+
+            return RangeQuantity(lower_quantity, upper_quantity, suffix)
+        else:
+            return None
+
+    def __init__(self, lower_quantity, upper_quantity, suffix):
+        self.lower_quantity = lower_quantity
+        self.upper_quantity = upper_quantity
+        self.suffix         = suffix
+
+    def __mul__(self, by):
+        return RangeQuantity(
+            self.lower_quantity * by,
+            self.upper_quantity * by,
+            self.suffix
+        )
+
+    def __str__(self):
+        if self.lower_quantity % 1 == 0 and self.upper_quantity % 1 == 0:
+            return '{:d}-{:d}{}'.format(
+                int(self.lower_quantity),
+                int(self.upper_quantity),
+                format_suffix(self.suffix)
+            )
+        else:
+            return '{:.2f}-{:.2f}{}'.format(
+                self.lower_quantity,
+                self.upper_quantity,
+                format_suffix(self.suffix)
+            )
 
 class FractionQuantity:
     parser = re.compile('^([0-9]+/[0-9]+)( {0,1}[a-z]+){0,1}$', re.IGNORECASE)
@@ -99,6 +141,7 @@ def scale_ingredient(ingredient, factor):
 
     formats = [
         SimpleQuantity,
+        RangeQuantity,
         FractionQuantity
     ]
 
