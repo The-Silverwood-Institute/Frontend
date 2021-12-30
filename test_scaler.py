@@ -81,39 +81,39 @@ class TestScaleIngredient:
         ingredient        = TestScaleIngredient.make_ingredient('4g')
         scaled_ingredient = TestScaleIngredient.make_scaled_ingredient('8g')
 
-        assert scaler.scale_ingredient(ingredient, 2) == scaled_ingredient
+        assert scaler.scale_ingredient(ingredient, 2.0) == scaled_ingredient
 
         ingredient        = TestScaleIngredient.make_ingredient('2 tbsp')
         scaled_ingredient = TestScaleIngredient.make_scaled_ingredient('4 tbsp')
 
-        assert scaler.scale_ingredient(ingredient, 2) == scaled_ingredient
+        assert scaler.scale_ingredient(ingredient, 2.0) == scaled_ingredient
 
     def test_scale_ingredient_with_fraction(self):
         ingredient        = TestScaleIngredient.make_ingredient('1/4')
         scaled_ingredient = TestScaleIngredient.make_scaled_ingredient('1/2')
 
-        assert scaler.scale_ingredient(ingredient, 2) == scaled_ingredient
+        assert scaler.scale_ingredient(ingredient, 2.0) == scaled_ingredient
 
     def test_scale_ingredient_with_uneven_fraction(self):
         ingredient        = TestScaleIngredient.make_ingredient('1/4')
         scaled_ingredient = TestScaleIngredient.make_scaled_ingredient('1 1/4')
 
-        assert scaler.scale_ingredient(ingredient, 5) == scaled_ingredient
+        assert scaler.scale_ingredient(ingredient, 5.0) == scaled_ingredient
 
     def test_scale_fractional_ingredient_to_int(self):
         ingredient        = TestScaleIngredient.make_ingredient('1/2')
         scaled_ingredient = TestScaleIngredient.make_scaled_ingredient('1')
 
-        assert scaler.scale_ingredient(ingredient, 2) == scaled_ingredient
+        assert scaler.scale_ingredient(ingredient, 2.0) == scaled_ingredient
 
     def test_scale_ingredient_with_uneven_fraction_with_suffix(self):
         ingredient        = TestScaleIngredient.make_ingredient('1/4 tsp')
         scaled_ingredient = TestScaleIngredient.make_scaled_ingredient('1 1/4 tsp')
 
-        assert scaler.scale_ingredient(ingredient, 5) == scaled_ingredient
+        assert scaler.scale_ingredient(ingredient, 5.0) == scaled_ingredient
 
     def test_scale_ingredient_with_range(self):
         ingredient        = TestScaleIngredient.make_ingredient('2-3')
         scaled_ingredient = TestScaleIngredient.make_scaled_ingredient('4-6')
 
-        assert scaler.scale_ingredient(ingredient, 2) == scaled_ingredient
+        assert scaler.scale_ingredient(ingredient, 2.0) == scaled_ingredient

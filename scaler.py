@@ -114,7 +114,7 @@ class FractionQuantity:
         self.suffix     = suffix
 
     def __mul__(self, by):
-        return FractionQuantity(self.quantity * by, self.suffix)
+        return FractionQuantity(Fraction(self.quantity * by), self.suffix)
 
     def __str__(self):
         remainder = self.quantity.numerator // self.quantity.denominator
