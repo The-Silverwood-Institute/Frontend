@@ -21,68 +21,99 @@ def get_scale_factor(req_params):
 
     return scale
 
-quantity_parser             = re.compile('^([0-9]+)( {0,1}[a-z]+){0,1}$', re.IGNORECASE)
-fraction_quantity_parser    = re.compile('^([0-9]+/[0-9]+)( {0,1}[a-z]+){0,1}$', re.IGNORECASE)
+def format_suffix(suffix):
+    return suffix if suffix is not None else ''
 
-def get_simple_quantity(raw_quantity):
-    match = quantity_parser.match(raw_quantity)
+class SimpleQuantity:
+    parser = re.compile('^([0-9]+)( {0,1}[a-z]+){0,1}$', re.IGNORECASE)
 
-    if match:
-        quantity    = int(match.group(1))
-        suffix      = match.group(2)
+    @staticmethod
+    def parse(raw_quantity):
+        match = SimpleQuantity.parser.match(raw_quantity)
 
-        return (quantity, suffix)
-    else:
-        return (None, None)
+        if match:
+            quantity    = int(match.group(1))
+            suffix      = match.group(2)
 
-def get_fraction_quantity(raw_quantity):
-    match = fraction_quantity_parser.match(raw_quantity)
+            return SimpleQuantity(quantity, suffix)
+        else:
+            return None
 
-    if match:
-        quantity    = Fraction(match.group(1))
-        suffix      = match.group(2)
+    def __init__(self, quantity, suffix):
+        self.quantity   = quantity
+        self.suffix     = suffix
 
-        return (quantity, suffix)
-    else:
-        return (None, None)
+    def __mul__(self, by):
+        return SimpleQuantity(self.quantity * by, self.suffix)
+
+    def __str__(self):
+        if self.quantity % 1 == 0:
+            return '{:d}{}'.format(int(self.quantity), format_suffix(self.suffix))
+        else:
+            return '{:.2f}{}'.format(scaled_ingredient, format_suffix(self.suffix))
+
+class FractionQuantity:
+    parser = re.compile('^([0-9]+/[0-9]+)( {0,1}[a-z]+){0,1}$', re.IGNORECASE)
+
+    @staticmethod
+    def parse(raw_quantity):
+        match = FractionQuantity.parser.match(raw_quantity)
+
+        if match:
+            quantity    = Fraction(match.group(1))
+            suffix      = match.group(2)
+
+            return FractionQuantity(quantity, suffix)
+        else:
+            return None
+
+    def __init__(self, quantity, suffix):
+        self.quantity   = quantity
+        self.suffix     = suffix
+
+    def __mul__(self, by):
+        return FractionQuantity(self.quantity * by, self.suffix)
+
+    def __str__(self):
+        remainder = self.quantity.numerator // self.quantity.denominator
+
+        if remainder:
+            even_fraction = self.quantity - remainder
+
+            return '{} {}/{}{}'.format(
+                remainder,
+                even_fraction.numerator,
+                even_fraction.denominator,
+                format_suffix(self.suffix)
+            )
+        else:
+            return '{}/{}{}'.format(
+                self.quantity.numerator,
+                self.quantity.denominator,
+                format_suffix(self.suffix)
+            )
 
 def scale_ingredient(ingredient, factor):
     if ingredient['quantity'] is None:
         return ingredient
-    else:
-        (quantity, suffix) = get_simple_quantity(ingredient['quantity'])
 
-        if quantity is None:
-            (quantity, suffix) = get_fraction_quantity(ingredient['quantity'])
+    formats = [
+        SimpleQuantity,
+        FractionQuantity
+    ]
 
-        if quantity is None:
-            return ingredient
+    for format in formats:
+        quantity = format.parse(ingredient['quantity'])
 
-        scaled_ingredient   = quantity * factor
-        str_suffix          = suffix if suffix is not None else ''
+        if quantity:
+            break
 
-        if isinstance(scaled_ingredient, Fraction):
-            remainder = scaled_ingredient.numerator // scaled_ingredient.denominator
-
-            if remainder:
-                even_fraction = scaled_ingredient - remainder
-
-                ingredient['quantity'] = '{} {}/{}{}'.format(
-                    remainder,
-                    even_fraction.numerator,
-                    even_fraction.denominator,
-                    str_suffix
-                )
-            else:
-                ingredient['quantity'] = '{}/{}{}'.format(
-                    scaled_ingredient.numerator,
-                    scaled_ingredient.denominator,
-                    str_suffix
-                )
-        elif scaled_ingredient % 1 == 0:
-            ingredient['quantity'] = '{:d}{}'.format(int(scaled_ingredient), str_suffix)
-        else:
-            ingredient['quantity'] = '{:.2f}{}'.format(scaled_ingredient, str_suffix)
-
-        ingredient['scaled'] = True
+    if quantity is None:
         return ingredient
+
+    scaled_quantity = quantity * factor
+
+    ingredient['scaled']    = True
+    ingredient['quantity']  = str(scaled_quantity)
+
+    return ingredient
