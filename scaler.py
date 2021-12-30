@@ -50,7 +50,7 @@ class SimpleQuantity:
         if self.quantity % 1 == 0:
             return '{:d}{}'.format(int(self.quantity), format_suffix(self.suffix))
         else:
-            return '{:.2f}{}'.format(scaled_ingredient, format_suffix(self.suffix)) # Fixme
+            return '{:.2f}{}'.format(self.quantity, format_suffix(self.suffix))
 
 class RangeQuantity:
     parser = re.compile('^([0-9]+)-([0-9]+)( {0,1}[a-z]+){0,1}$', re.IGNORECASE)

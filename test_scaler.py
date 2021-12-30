@@ -71,6 +71,12 @@ class TestScaleIngredient:
         assert scaled_ingredient['quantity'] == '4'
         assert scaled_ingredient['scaled'] == True
 
+    def test_scale_ingredient_by_fraction(self):
+        ingredient = {'name': 'Onion', 'quantity': '1'}
+        scaled_ingredient = scaler.scale_ingredient(ingredient, 1.5)
+        assert scaled_ingredient['quantity'] == '1.50'
+        assert scaled_ingredient['scaled'] == True
+
     def test_scale_ingredient_with_suffix(self):
         ingredient        = TestScaleIngredient.make_ingredient('4g')
         scaled_ingredient = TestScaleIngredient.make_scaled_ingredient('8g')
