@@ -56,7 +56,7 @@ def scale_ingredient(ingredient, factor):
             (quantity, suffix) = get_fraction_quantity(ingredient['quantity'])
 
         if quantity is None:
-            return ingredient['quantity']
+            return ingredient
 
         scaled_ingredient   = quantity * factor
         str_suffix          = suffix if suffix is not None else ''

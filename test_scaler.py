@@ -61,6 +61,10 @@ class TestScaleIngredient:
         ingredient = {'name': 'Onion', 'quantity': None}
         assert scaler.scale_ingredient(ingredient, 2) == {'name': 'Onion', 'quantity': None}
 
+    def test_ignore_ingredients_with_unparseable_quantity(self):
+        ingredient = {'name': 'Onion', 'quantity': 'About 3'}
+        assert scaler.scale_ingredient(ingredient, 2) == {'name': 'Onion', 'quantity': 'About 3'}
+
     def test_scale_ingredient(self):
         ingredient = {'name': 'Onion', 'quantity': '2'}
         scaled_ingredient = scaler.scale_ingredient(ingredient, 2)
