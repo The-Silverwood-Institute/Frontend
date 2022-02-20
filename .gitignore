@@ -1,5 +1,7 @@
 # Ignore database
 recipes.db
+# Ignore output of scraper
+recipes.json
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
