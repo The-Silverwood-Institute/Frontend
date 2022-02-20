@@ -35,4 +35,4 @@ $if recipe['notes']:
     $code:
       notes = filter(lambda note: len(note.strip()) > 0, recipe['notes'].split('\n'))
     $for note in notes:
-      <p>$note</p>
+      <p>$:note</p>
