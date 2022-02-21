@@ -67,11 +67,11 @@ $def with (content)
         $ recipeUrl = ''
       $for listItem in recipeList:
         $code:
-          if listItem['url'] == recipeUrl:
+          if listItem['permalink'] == recipeUrl:
             itemClass = 'is-current'
           else:
             itemClass = ''
-        <a class="mdl-navigation__link $itemClass" href="$listItem['url']">$:listItem['name']</a>
+        <a class="mdl-navigation__link $itemClass" href="$listItem['permalink']">$:listItem['name']</a>
     </nav>
   </div>
   <main class="mdl-layout__content">

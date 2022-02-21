@@ -1,14 +1,14 @@
 $def with (recipe)
 $var pageName: $recipe['name']
 $var pageDescription: $recipe['description']
-$var pagePath: $recipe['url']
+$var pagePath: $recipe['permalink']
 $code:
   def getImageProperty(prop):
     return recipe['image'][prop] if recipe['image'] else None
 $var imageSrc: $getImageProperty('src')
 $var imageWidth: $getImageProperty('width')
 $var imageHeight: $getImageProperty('height')
-$var recipeUrl: $recipe['url']
+$var recipeUrl: $recipe['permalink']
 <h2>$recipe['name']</h2>
 $if recipe['tagline']:
   <em>$recipe['tagline']</em>

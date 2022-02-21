@@ -9,7 +9,7 @@ $def with (baseUrl)
 
   $for listItem in recipeList:
     <url>
-      <loc>$baseUrl/$listItem['url']</loc>
+      <loc>$baseUrl/$listItem['permalink']</loc>
     </url>
 
 </urlset>

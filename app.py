@@ -51,7 +51,7 @@ class homepage:
 
 class randomRecipe:
     def GET(self):
-        return web.found(random.choice(globals['recipeList'])['url'])
+        return web.found(random.choice(globals['recipeList'])['permalink'])
 
 class recipe:
     def GET(self, name):

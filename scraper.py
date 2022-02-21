@@ -13,7 +13,7 @@ recipe_list = requests.get(base_url).json()
 recipes = []
 
 for recipe_entry in recipe_list:
-    recipe_url = base_url + recipe_entry['url']
+    recipe_url = base_url + recipe_entry['permalink']
 
     recipes.append(requests.get(recipe_url).json())
 

@@ -43,7 +43,7 @@ function searchRecipes() {
         throw new OutdatedSearchResult(searchTerm);
       }
 
-      return new Set(json.map(recipe => recipe['url']));
+      return new Set(json.map(recipe => recipe['permalink']));
     })
     .then(
       urls => filterRecipes(searchTerm, urls),
