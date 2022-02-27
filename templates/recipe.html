@@ -14,7 +14,13 @@ $if recipe['tagline']:
   <em>$recipe['tagline']</em>
 $if recipe['description']:
   <p class="description">$recipe['description']</p>
-<h3>Ingredients</h3>
+<h3 id="ingredients">Ingredients</h3>
+<div id="ingredient-tools">
+  <span><a href="?scale=.5">&frac12;</a></span>
+  <span><a href="?scale=1">1X</a></span>
+  <span><a href="?scale=2">2X</a></span>
+  <span><a href="?scale=3">3X</a></span>
+</div>
 <ul class="ingredients">
 $for ingredient in recipe['ingredients']:
   $code:

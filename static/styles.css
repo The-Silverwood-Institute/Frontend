@@ -58,6 +58,23 @@ h2 {
   padding-top: 0px;
 }
 
+#ingredients {
+  margin-bottom: 12px;
+}
+
+#ingredient-tools {
+  margin-left: 1.5rem;
+}
+
+#ingredient-tools a {
+  color: inherit;
+  text-decoration: inherit;
+  border: 1.5px solid rgb(97, 97, 97);
+  border-radius: 4px;
+  padding: 2px;
+  font-weight: bold;
+}
+
 ul.ingredients span {
   padding: 0.2em;
 }
