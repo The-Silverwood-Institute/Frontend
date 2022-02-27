@@ -75,6 +75,10 @@ h2 {
   font-weight: bold;
 }
 
+#ingredient-tools a.is-current {
+  border-width: 2px;
+}
+
 ul.ingredients span {
   padding: 0.2em;
 }

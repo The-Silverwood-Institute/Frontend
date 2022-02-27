@@ -66,8 +66,9 @@ class recipe:
             scale_factor = scaler.get_scale_factor(web.input())
             if scale_factor:
                 recipe['ingredients'] = list(map(lambda i: scaler.scale_ingredient(i, scale_factor), recipe['ingredients']))
-
-            return templates.recipe(recipe)
+            else:
+                scale_factor = 1
+            return templates.recipe(recipe, scale_factor)
         else:
             raise web.notfound()
 

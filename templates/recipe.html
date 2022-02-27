@@ -1,4 +1,4 @@
-$def with (recipe)
+$def with (recipe, scale_factor)
 $var pageName: $recipe['name']
 $var pageDescription: $recipe['description']
 $var pagePath: $recipe['permalink']
@@ -16,10 +16,13 @@ $if recipe['description']:
   <p class="description">$recipe['description']</p>
 <h3 id="ingredients">Ingredients</h3>
 <div id="ingredient-tools">
-  <span><a href="?scale=.5">&frac12;</a></span>
-  <span><a href="?scale=1">1X</a></span>
-  <span><a href="?scale=2">2X</a></span>
-  <span><a href="?scale=3">3X</a></span>
+  $for scale in [(.5, "&frac12;"), (1, "1X"), (2, "2X"), (3, "3X")]:
+    $code:
+      if scale[0] == scale_factor:
+        itemClass = 'is-current'
+      else:
+        itemClass = ''
+    <span><a href="?scale=$scale[0]" class="$itemClass">$:scale[1]</a></span>
 </div>
 <ul class="ingredients">
 $for ingredient in recipe['ingredients']:
