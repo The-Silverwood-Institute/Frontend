@@ -58,32 +58,47 @@ h2 {
   padding-top: 0px;
 }
 
-#ingredients {
+#ingredients-heading {
   margin-bottom: 12px;
 }
 
 #ingredient-tools {
   margin-left: 1.5rem;
+  overflow: auto;
+}
+
+#ingredient-tools #copy {
+  cursor: pointer;
+}
+
+#ingredient-tools span {
+  float: left;
+  margin: 2px;
+}
+
+#ingredient-tools span.scaler {
+  margin-top: 4px;
 }
 
 #ingredient-tools a {
   color: inherit;
   text-decoration: inherit;
-  border: 1.5px solid rgb(97, 97, 97);
+  border: 2px solid rgb(97, 97, 97);
   border-radius: 4px;
   padding: 2px;
   font-weight: bold;
 }
 
 #ingredient-tools a.is-current {
-  border-width: 2px;
+  background: rgb(97, 97, 97);
+  color: white;
 }
 
-ul.ingredients span {
+ul#ingredients span {
   padding: 0.2em;
 }
 
-ul.ingredients span.scaled {
+ul#ingredients span.scaled {
   background-color: rgba(255, 255, 0, 0.2);
 }
 

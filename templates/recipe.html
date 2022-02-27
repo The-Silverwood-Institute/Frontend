@@ -14,17 +14,20 @@ $if recipe['tagline']:
   <em>$recipe['tagline']</em>
 $if recipe['description']:
   <p class="description">$recipe['description']</p>
-<h3 id="ingredients">Ingredients</h3>
+<h3 id="ingredients-heading">Ingredients</h3>
 <div id="ingredient-tools">
-  $for scale in [(.5, "&frac12;"), (1, "1X"), (2, "2X"), (3, "3X")]:
+  <span id="copy" class="material-icons" title="Copy ingredients to clipboard">content_copy</span>
+  $for scale in [(0.5, "&frac12;"), (1, "1X"), (2, "2X"), (3, "3X")]:
     $code:
       if scale[0] == scale_factor:
         itemClass = 'is-current'
       else:
         itemClass = ''
-    <span><a href="?scale=$scale[0]" class="$itemClass">$:scale[1]</a></span>
+    <span class="scaler" title="Scale by a factor of $scale[0]">
+      <a href="?scale=$scale[0]" class="$itemClass">$:scale[1]</a>
+    </span>
 </div>
-<ul class="ingredients">
+<ul id="ingredients">
 $for ingredient in recipe['ingredients']:
   $code:
     quantity = (": "  + ingredient['quantity']) if ingredient['quantity'] else ""
@@ -32,7 +35,7 @@ $for ingredient in recipe['ingredients']:
     notes = (" (" + ingredient['notes'] + ")") if ingredient['notes'] else ""
     ingredientText = ingredient['name'] + quantity + prep + notes
     is_scaled = 'scaled' if 'scaled' in ingredient and ingredient['scaled'] == True else ''
-  <li><span class="$is_scaled">$ingredientText</span></li>
+  <li><span class="ingredient $is_scaled" x-quantity="$ingredient['quantity']" x-ingredient="$ingredient['name']">$ingredientText</span></li>
 </ul>
 <h3>Method</h3>
 <ol>
