@@ -26,6 +26,9 @@ $if recipe['description']:
     <span class="scaler" title="Scale by a factor of $scale[0]">
       <a href="?scale=$scale[0]" class="$itemClass">$:scale[1]</a>
     </span>
+  <a href="$recipe['edit']">
+    <span class="material-icons" title="Edit recipe on GitHub">edit</span>
+  </a>
 </div>
 <ul id="ingredients">
 $for ingredient in recipe['ingredients']:

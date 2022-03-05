@@ -83,13 +83,16 @@ h2 {
 #ingredient-tools a {
   color: inherit;
   text-decoration: inherit;
+}
+
+#ingredient-tools .scaler a {
   border: 2px solid rgb(97, 97, 97);
   border-radius: 4px;
   padding: 2px;
   font-weight: bold;
 }
 
-#ingredient-tools a.is-current {
+#ingredient-tools .scaler a.is-current {
   background: rgb(97, 97, 97);
   color: white;
 }
