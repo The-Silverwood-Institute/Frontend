@@ -51,3 +51,7 @@ $if recipe['notes']:
       notes = filter(lambda note: len(note.strip()) > 0, recipe['notes'].split('\n'))
     $for note in notes:
       <p>$:note</p>
+$if recipe['source'] and recipe['source'].startswith('http'):
+  <em><a href="$recipe['source']" rel="nofollow">Recipe Source</a></em>
+$elif recipe['source']:
+  <em>Recipe Source: $recipe['source']</em>
