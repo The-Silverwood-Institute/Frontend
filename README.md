@@ -1,6 +1,6 @@
 # Frontend
 
-[![CircleCI Badge](https://circleci.com/gh/The-Silverwood-Institute/Frontend.svg?style=svg)](https://circleci.com/gh/The-Silverwood-Institute/Frontend)
+![Tests and deployment status](https://github.com/The-Silverwood-Institute/Frontend/actions/workflows/build.yml/badge.svg)
 
 The website of [Recibase][recibase], the recipe ingestion and discovery service.
 
