@@ -26,7 +26,7 @@ urls = (
 )
 app = AppWithHerokuRedirect(urls, globals())
 backendBaseUrl = os.getenv('BACKEND_URL', "http://localhost:8081/")
-frontendVersion = os.getenv('HEROKU_SLUG_COMMIT', 'latest')
+frontendVersion = os.getenv('RENDER_GIT_COMMIT', 'latest')
 
 globals = {
     'recipeList': requests.get(backendBaseUrl + 'recipes/').json(),
