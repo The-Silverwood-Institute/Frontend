@@ -7,7 +7,7 @@ $def with (baseUrl)
     <loc>$baseUrl/</loc>
   </url>
 
-  $for listItem in recipeList:
+  $for listItem in fetchRecipeList():
     <url>
       <loc>$baseUrl/$listItem['permalink']</loc>
     </url>

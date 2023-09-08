@@ -4,6 +4,7 @@ import json
 import random
 import requests
 import scaler
+import cached_backend
 
 class AppWithHerokuRedirect(web.application):
     # Based on:
@@ -28,8 +29,9 @@ app = AppWithHerokuRedirect(urls, globals())
 backendBaseUrl = os.getenv('BACKEND_URL', "http://localhost:8081/")
 frontendVersion = os.getenv('RENDER_GIT_COMMIT', 'latest')
 
+backendMenuFetcher = cached_backend.BackendMenuFetcher(backendBaseUrl)
 globals = {
-    'recipeList': requests.get(backendBaseUrl + 'recipes/').json(),
+    'fetchRecipeList': backendMenuFetcher.fetch_recipe_list,
     'frontendVersion': frontendVersion,
     'apiVersion': requests.get(backendBaseUrl + 'manifest').json()['version']
 }
@@ -51,7 +53,7 @@ class homepage:
 
 class randomRecipe:
     def GET(self):
-        return web.found(random.choice(globals['recipeList'])['permalink'])
+        return web.found(random.choice(backendMenuFetcher.fetch_recipe_list())['permalink'])
 
 class recipe:
     def GET(self, name):
