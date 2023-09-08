@@ -30,10 +30,11 @@ backendBaseUrl = os.getenv('BACKEND_URL', "http://localhost:8081/")
 frontendVersion = os.getenv('RENDER_GIT_COMMIT', 'latest')
 
 backendMenuFetcher = cached_backend.CachedBackendCall(lambda: requests.get(backendBaseUrl + 'recipes/').json())
+backendVersion = cached_backend.CachedBackendCall(lambda: requests.get(backendBaseUrl + 'manifest').json()['version'])
 globals = {
     'fetchRecipeList': backendMenuFetcher.fetch_data,
     'frontendVersion': frontendVersion,
-    'apiVersion': requests.get(backendBaseUrl + 'manifest').json()['version']
+    'fetchApiVersion': backendVersion.fetch_data
 }
 templates = web.template.render('templates/', base='layout', globals=globals)
 plainTemplates = web.template.render('templates/', globals=globals)
