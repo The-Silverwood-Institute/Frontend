@@ -28,6 +28,7 @@ urls = (
 app = AppWithHerokuRedirect(urls, globals())
 backendBaseUrl = os.getenv('BACKEND_URL', "http://localhost:8081/")
 frontendVersion = os.getenv('RENDER_GIT_COMMIT', 'latest')
+print(os. environ)
 
 backendMenuFetcher = cached_backend.CachedBackendCall(lambda: requests.get(backendBaseUrl + 'recipes/').json())
 backendVersion = cached_backend.CachedBackendCall(lambda: requests.get(backendBaseUrl + 'manifest').json()['version'])
