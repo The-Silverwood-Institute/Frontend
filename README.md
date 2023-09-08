@@ -20,8 +20,8 @@ Test with `pytest`
 ## Usage
 
 ### To start
-`BACKEND_URL="https://api.reciba.se/" python3 app.py`
-Then navigate to http://0.0.0.0:8080/
+1. `BACKEND_URL="https://api.reciba.se/" python3 app.py`
+2. Navigate to http://0.0.0.0:8080/
 
 If you don't specify `BACKEND_URL` you will need to also have the [Recibase API][recibase] running locally.
 
