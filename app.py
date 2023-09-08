@@ -29,9 +29,9 @@ app = AppWithHerokuRedirect(urls, globals())
 backendBaseUrl = os.getenv('BACKEND_URL', "http://localhost:8081/")
 frontendVersion = os.getenv('RENDER_GIT_COMMIT', 'latest')
 
-backendMenuFetcher = cached_backend.BackendMenuFetcher(backendBaseUrl)
+backendMenuFetcher = cached_backend.CachedBackendCall(lambda: requests.get(backendBaseUrl + 'recipes/').json())
 globals = {
-    'fetchRecipeList': backendMenuFetcher.fetch_recipe_list,
+    'fetchRecipeList': backendMenuFetcher.fetch_data,
     'frontendVersion': frontendVersion,
     'apiVersion': requests.get(backendBaseUrl + 'manifest').json()['version']
 }
@@ -53,7 +53,7 @@ class homepage:
 
 class randomRecipe:
     def GET(self):
-        return web.found(random.choice(backendMenuFetcher.fetch_recipe_list())['permalink'])
+        return web.found(random.choice(backendMenuFetcher.fetch_data())['permalink'])
 
 class recipe:
     def GET(self, name):
