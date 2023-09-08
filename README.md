@@ -20,10 +20,10 @@ Test with `pytest`
 ## Usage
 
 ### To start
-`python app.py`
+`BACKEND_URL="https://api.reciba.se/" python3 app.py`
 Then navigate to http://0.0.0.0:8080/
 
-Recibase's frontend needs a `recipes.db` database to start. You can generate this using [Recibase][recibase].
+If you don't specify `BACKEND_URL` you will need to also have the [Recibase API][recibase] running locally.
 
 ### To stop
 Hold `Ctrl + C` until it quits
