@@ -97,11 +97,11 @@ h2 {
   color: white;
 }
 
-ul#ingredients span {
+div#ingredients span {
   padding: 0.2em;
 }
 
-ul#ingredients span.scaled {
+div#ingredients span.scaled {
   background-color: rgba(255, 255, 0, 0.2);
 }
 

@@ -68,7 +68,7 @@ class recipe:
 
             scale_factor = scaler.get_scale_factor(web.input())
             if scale_factor:
-                recipe['ingredients'] = list(map(lambda i: scaler.scale_ingredient(i, scale_factor), recipe['ingredients']))
+                recipe['ingredients_blocks'] = list(map(lambda b: dict(name=b['name'], ingredients=list(map(lambda i: scaler.scale_ingredient(i, scale_factor), b['ingredients']))), recipe['ingredients_blocks']))
             else:
                 scale_factor = 1
             return templates.recipe(recipe, scale_factor)
