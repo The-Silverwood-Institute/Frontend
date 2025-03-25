@@ -11,11 +11,17 @@ Recibase's frontend uses [web.py][webpy].
 - Python 3.9
 - pip
 
-## Installation
+Currently [doesn't work](https://github.com/webpy/webpy/issues/799) on Python 3.13
 
-`pip install -r requirements.txt`
+## Setup
 
-Test with `pytest`
+1. `python3 -m venv .venv`
+2. `source .venv/bin/activate`
+3. `pip install -r requirements.txt`
+
+Repeat step 2 every time you open a new shell
+
+Test setup was successful with `pytest`
 
 ## Usage
 
