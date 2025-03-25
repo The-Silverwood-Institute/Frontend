@@ -80,6 +80,10 @@ h2 {
   margin-top: 4px;
 }
 
+#ingredient-tools .trailing-icons span {
+  margin: 2px 0px;
+}
+
 #ingredient-tools a {
   color: inherit;
   text-decoration: inherit;
@@ -95,6 +99,14 @@ h2 {
 #ingredient-tools .scaler a.is-current {
   background: rgb(97, 97, 97);
   color: white;
+}
+
+.wakelock-unsupported {
+  display: none;
+}
+
+#wakelock:hover {
+  cursor: pointer;
 }
 
 div#ingredients span {

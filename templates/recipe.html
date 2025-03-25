@@ -26,9 +26,12 @@ $if recipe['description']:
     <span class="scaler" title="Scale by a factor of $scale[0]">
       <a href="?scale=$scale[0]" class="$itemClass">$:scale[1]</a>
     </span>
-  <a href="$recipe['edit']">
-    <span class="material-icons" title="Edit recipe on GitHub">edit</span>
-  </a>
+  <div class="trailing-icons">
+    <a href="$recipe['edit']">
+      <span class="material-icons" title="Edit recipe on GitHub">edit</span>
+    </a>
+    <span id="wakelock" class="material-icons wakelock-unsupported" title="Prevent screen lock">visibility</span>
+  </div>
 </div>
 <div id="ingredients">
 $for ingredients_block in recipe['ingredients_blocks']:
