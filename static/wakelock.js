@@ -16,11 +16,13 @@ if ("wakeLock" in navigator & wakelockEl != null) {
             wakelock = await navigator.wakeLock.request("screen");
             wakelockEl.innerHTML = iconWakelockActive;
             wakelockEl.title = textWakelockActive;
+            wakelock.addEventListener("release", () => {
+                wakelock = null;
+                wakelockEl.innerHTML = iconWakelockInactive;
+                wakelockEl.title = textWakelockInactive;
+            });
         } else {
             await wakelock.release();
-            wakelock = null;
-            wakelockEl.innerHTML = iconWakelockInactive;
-            wakelockEl.title = textWakelockInactive;
         }
     };
 
