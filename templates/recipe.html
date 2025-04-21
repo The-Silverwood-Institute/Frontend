@@ -55,10 +55,10 @@ $for ingredients_block in recipe['ingredients_blocks']:
 $for step in recipe['method']:
   <li>$step</li>
 </ol>
-$if recipe['notes']:
+$if recipe['legacy_notes']:
   <h3>Notes</h3>
     $code:
-      notes = filter(lambda note: len(note.strip()) > 0, recipe['notes'].split('\n'))
+      notes = filter(lambda note: len(note.strip()) > 0, recipe['legacy_notes'].split('\n'))
     $for note in notes:
       <p>$:note</p>
 $if recipe['source'] and recipe['source'].startswith('http'):
