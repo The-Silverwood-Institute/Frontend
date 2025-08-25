@@ -55,13 +55,16 @@ $for ingredients_block in recipe['ingredients_blocks']:
 $for step in recipe['method']:
   <li>$step</li>
 </ol>
-$if recipe['notes']:
+$code:
+  formatted_dated_notes = ['{}: {}'.format(note['date'], note['note']) for note in recipe['dated_notes']]
+  combined_notes = recipe['notes'] + formatted_dated_notes
+$if len(combined_notes) > 0:
   <h3>Notes</h3>
-  $if len(recipe['notes']) == 1:
-    <p>$recipe['notes'][0]</p>
+    $if len(combined_notes) == 1:
+    <p>$combined_notes[0]</p>
   $else:
     <ul>
-    $for note in recipe['notes']:
+    $for note in combined_notes:
       <li>$:note</li>
     </ul>
 $if recipe['source'] and recipe['source'].startswith('http'):
