@@ -67,6 +67,8 @@ $if len(combined_notes) > 0:
     $for note in combined_notes:
       <li>$:note</li>
     </ul>
+$if 'AI' in recipe['tags']:
+  <em>⚠️ Carefully review this recipe as AI was used to generate it</em>
 $if recipe['source'] and recipe['source'].startswith('http'):
   <em><a href="$recipe['source']" rel="nofollow">Recipe Source</a></em>
 $elif recipe['source']:
