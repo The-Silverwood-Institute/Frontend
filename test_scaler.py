@@ -123,3 +123,121 @@ class TestScaleIngredient:
         scaled_ingredient = TestScaleIngredient.make_scaled_ingredient('4-6')
 
         assert scaler.scale_ingredient(ingredient, 2.0) == scaled_ingredient
+
+    def test_scale_decimal_quantity(self):
+        ingredient        = TestScaleIngredient.make_ingredient('4.5 tsp')
+        scaled_ingredient = TestScaleIngredient.make_scaled_ingredient('9 tsp')
+
+        assert scaler.scale_ingredient(ingredient, 2.0) == scaled_ingredient
+
+    def test_scale_decimal_quantity_without_space(self):
+        ingredient        = TestScaleIngredient.make_ingredient('12.5g')
+        scaled_ingredient = TestScaleIngredient.make_scaled_ingredient('25g')
+
+        assert scaler.scale_ingredient(ingredient, 2.0) == scaled_ingredient
+
+    def test_scale_mixed_fraction_quantity(self):
+        ingredient        = TestScaleIngredient.make_ingredient('1 1/2 tsp')
+        scaled_ingredient = TestScaleIngredient.make_scaled_ingredient('3 tsp')
+
+        assert scaler.scale_ingredient(ingredient, 2.0) == scaled_ingredient
+
+    def test_scale_compound_tin_quantity(self):
+        ingredient        = TestScaleIngredient.make_ingredient('2 400g tins')
+        scaled_ingredient = TestScaleIngredient.make_scaled_ingredient('4 400g tins')
+
+        assert scaler.scale_ingredient(ingredient, 2.0) == scaled_ingredient
+
+    def test_scale_single_compound_tin_quantity(self):
+        ingredient        = TestScaleIngredient.make_ingredient('1 400g tin')
+        scaled_ingredient = TestScaleIngredient.make_scaled_ingredient('2 400g tins')
+
+        assert scaler.scale_ingredient(ingredient, 2.0) == scaled_ingredient
+
+    def test_scale_implicit_compound_tin_quantity(self):
+        ingredient        = TestScaleIngredient.make_ingredient('400g tin')
+        scaled_ingredient = TestScaleIngredient.make_scaled_ingredient('2 400g tins')
+
+        assert scaler.scale_ingredient(ingredient, 2.0) == scaled_ingredient
+
+    def test_scale_compound_fillet_quantity(self):
+        ingredient        = TestScaleIngredient.make_ingredient('2 110g fillets')
+        scaled_ingredient = TestScaleIngredient.make_scaled_ingredient('4 110g fillets')
+
+        assert scaler.scale_ingredient(ingredient, 2.0) == scaled_ingredient
+
+    def test_scale_parenthetical_tin_quantity(self):
+        ingredient        = TestScaleIngredient.make_ingredient('1 tin (400g)')
+        scaled_ingredient = TestScaleIngredient.make_scaled_ingredient('2 tins (400g)')
+
+        assert scaler.scale_ingredient(ingredient, 2.0) == scaled_ingredient
+
+    def test_scale_parenthetical_block_quantity(self):
+        ingredient        = TestScaleIngredient.make_ingredient('1 block (225g)')
+        scaled_ingredient = TestScaleIngredient.make_scaled_ingredient('2 blocks (225g)')
+
+        assert scaler.scale_ingredient(ingredient, 2.0) == scaled_ingredient
+
+    def test_scale_approximate_block_quantity(self):
+        ingredient        = TestScaleIngredient.make_ingredient('1 block, approx. 200g')
+        scaled_ingredient = TestScaleIngredient.make_scaled_ingredient('2 blocks, approx 400g')
+
+        assert scaler.scale_ingredient(ingredient, 2.0) == scaled_ingredient
+
+    def test_scale_tilde_approximate_quantity(self):
+        ingredient        = TestScaleIngredient.make_ingredient('~70g')
+        scaled_ingredient = TestScaleIngredient.make_scaled_ingredient('~140g')
+
+        assert scaler.scale_ingredient(ingredient, 2.0) == scaled_ingredient
+
+    def test_scale_suffix_approximate_quantity(self):
+        ingredient        = TestScaleIngredient.make_ingredient('25g approx')
+        scaled_ingredient = TestScaleIngredient.make_scaled_ingredient('50g approx')
+
+        assert scaler.scale_ingredient(ingredient, 2.0) == scaled_ingredient
+
+    def test_scale_up_to_approximate_quantity(self):
+        ingredient        = TestScaleIngredient.make_ingredient('up to 75g')
+        scaled_ingredient = TestScaleIngredient.make_scaled_ingredient('up to 150g')
+
+        assert scaler.scale_ingredient(ingredient, 2.0) == scaled_ingredient
+
+    def test_scale_descriptive_quantities(self):
+        cases = [
+            ('1 large clove', '2 large cloves'),
+            ('1 large tin', '2 large tins'),
+            ('1 large bag minimum', '2 large bags minimum'),
+            ('1 heaped tablespoon', '2 heaped tablespoons'),
+            ('2 fork-fulls', '4 fork-fulls'),
+        ]
+
+        for quantity, expected in cases:
+            ingredient = TestScaleIngredient.make_ingredient(quantity)
+            scaled_ingredient = TestScaleIngredient.make_scaled_ingredient(expected)
+            assert scaler.scale_ingredient(ingredient, 2.0) == scaled_ingredient
+
+    def test_scale_length_quantities(self):
+        cases = [
+            ('1 cm piece', '2 cm pieces'),
+            ('1cm piece', '2cm pieces'),
+            ('2.5cm', '5cm'),
+        ]
+
+        for quantity, expected in cases:
+            ingredient = TestScaleIngredient.make_ingredient(quantity)
+            scaled_ingredient = TestScaleIngredient.make_scaled_ingredient(expected)
+            assert scaler.scale_ingredient(ingredient, 2.0) == scaled_ingredient
+
+    def test_ignore_vague_quantities(self):
+        vague_quantities = [
+            'pinch',
+            'handful',
+            'knob',
+            'generous dash',
+            '1 per person',
+            'Several teaspoons',
+        ]
+
+        for quantity in vague_quantities:
+            ingredient = TestScaleIngredient.make_ingredient(quantity)
+            assert scaler.scale_ingredient(ingredient, 2.0) == ingredient
