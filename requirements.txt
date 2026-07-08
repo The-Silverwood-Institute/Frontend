@@ -1,3 +1,4 @@
-web.py==0.62
+flask==3.1.0
+gunicorn==23.0.0
 requests==2.33.0
 pytest==9.0.3

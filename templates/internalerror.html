@@ -1,8 +1,10 @@
-$def with ()
-$var pageName : Internal Error
-$var pageDescription: Something went wrong, sorry
+{% extends "layout.html" %}
+{% set pageName = 'Internal Error' %}
+{% set pageDescription = 'Something went wrong, sorry' %}
+{% block content %}
 <h2>500 - Internal Error</h2>
 
 <p>Oh noes 🔥</p>
 
 <p>Something went wrong, sorry.</p>
+{% endblock %}

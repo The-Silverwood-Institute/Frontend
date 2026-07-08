@@ -1,48 +1,53 @@
-$def with (content)
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
 
-  <title>$:content.pageName • Recibase</title>
+  <title>{{ pageName }} • Recibase</title>
 
   <meta name="author" content="The Silverwood Institute">
 
-  $if 'pageDescription' in content and content.pageDescription:
-    <meta name="description" content="$:content.pageDescription">
-    <meta property="og:description" content="$:content.pageDescription">
-  $else:
+  {% if pageDescription is defined and pageDescription %}
+    <meta name="description" content="{{ pageDescription }}">
+    <meta property="og:description" content="{{ pageDescription }}">
+  {% else %}
     <meta name="description" content="Kit and Alex's curated recipe collection. Mostly vegetarian, all delicious">
     <meta property="og:description" content="Kit and Alex's curated recipe collection. Mostly vegetarian, all delicious">
+  {% endif %}
 
-  $if 'imageSrc' in content and content.imageSrc:
+  {% if imageSrc is defined and imageSrc %}
     <meta name="twitter:card" content="summary_large_image">
-  $else:
+  {% else %}
     <meta name="twitter:card" content="summary">
+  {% endif %}
 
   <meta name="twitter:site" content="@kittsville">
-  <meta property="og:title" content="$:content.pageName">
+  <meta property="og:title" content="{{ pageName }}">
   <meta property="og:site_name" content="Recibase">
   <meta property="og:type" content="website">
 
-  $if 'pagePath' in content:
-    <meta property="og:url" content="https://reciba.se/$content.pagePath">
+  {% if pagePath is defined and pagePath %}
+    <meta property="og:url" content="https://reciba.se/{{ pagePath }}">
+  {% endif %}
 
   <link rel="stylesheet" href="/static/material.indigo-deep_purple.min.css" />
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
   <script defer src="/static/material.min.js"></script>
-  <link rel="stylesheet" href="/static/styles.css?v=$frontendVersion" />
-  <script defer src="/static/search.js?v=$frontendVersion"></script>
-  <script defer src="/static/copy.js?v=$frontendVersion"></script>
-  <script defer src="/static/wakelock.js?v=$frontendVersion"></script>
+  <link rel="stylesheet" href="/static/styles.css?v={{ config.frontendVersion }}" />
+  <script defer src="/static/search.js?v={{ config.frontendVersion }}"></script>
+  <script defer src="/static/copy.js?v={{ config.frontendVersion }}"></script>
+  <script defer src="/static/wakelock.js?v={{ config.frontendVersion }}"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  $if 'imageSrc' in content and content.imageSrc:
-    <meta property="og:image" content="$content.imageSrc">
-  $if 'imageWidth' in content and content.imageWidth:
-    <meta property="og:image:width" content="$content.imageWidth">
-  $if 'imageHeight' in content and content.imageHeight:
-    <meta property="og:image:height" content="$content.imageHeight">
+  {% if imageSrc is defined and imageSrc %}
+    <meta property="og:image" content="{{ imageSrc }}">
+  {% endif %}
+  {% if imageWidth is defined and imageWidth %}
+    <meta property="og:image:width" content="{{ imageWidth }}">
+  {% endif %}
+  {% if imageHeight is defined and imageHeight %}
+    <meta property="og:image:height" content="{{ imageHeight }}">
+  {% endif %}
 </head>
 
 <body class="mdl-color--grey-100 mdl-color-text--grey-700 mdl-base">
@@ -63,30 +68,24 @@ $def with (content)
       </div>
     </form>
     <nav class="mdl-navigation">
-      $if 'recipeUrl' in content:
-        $ recipeUrl = content.recipeUrl
-      $else:
-        $ recipeUrl = ''
-      $for listItem in fetchRecipeList():
-        $code:
-          if listItem['permalink'] == recipeUrl:
-            itemClass = 'is-current'
-          else:
-            itemClass = ''
-        <a class="mdl-navigation__link $itemClass" href="$listItem['permalink']">$:listItem['name']</a>
+      {% set current_recipe_url = recipeUrl|default('') %}
+      {% for listItem in fetchRecipeList() %}
+        <a class="mdl-navigation__link {{ 'is-current' if listItem['permalink'] == current_recipe_url }}" href="{{ listItem['permalink'] }}">{{ listItem['name'] }}</a>
+      {% endfor %}
     </nav>
   </div>
   <main class="mdl-layout__content">
     <section class="section--center mdl-grid">
       <div class="mdl-cell mdl-cell--12-col">
-        $:content
+        {% block content %}{% endblock %}
       </div>
     </section>
   </main>
   <footer>
-    v<a href="https://github.com/The-Silverwood-Institute/Recibase/commit/$fetchApiVersion()">$fetchApiVersion()[:6]</a>.<a href="https://github.com/The-Silverwood-Institute/Frontend/commit/$frontendVersion">$frontendVersion[:6]</a>
+    v<a href="https://github.com/The-Silverwood-Institute/Recibase/commit/{{ fetchApiVersion() }}">{{ fetchApiVersion()[:6] }}</a>.<a href="https://github.com/The-Silverwood-Institute/F2/commit/{{ config.frontendVersion }}">{{ config.frontendVersion[:6] }}</a>
     | <a href="https://github.com/The-Silverwood-Institute/Recibase">Source Code</a>
     | <a href="https://c.reciba.se/">Meal Planner</a>
   </footer>
 </div>
-<body>
+</body>
+</html>

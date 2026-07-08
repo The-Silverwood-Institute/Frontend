@@ -1,6 +1,8 @@
-$def with ()
-$var pageName : Page not Found
-$var pageDescription: Nobody here but us chickens
+{% extends "layout.html" %}
+{% set pageName = 'Page not Found' %}
+{% set pageDescription = 'Nobody here but us chickens' %}
+{% block content %}
 <h2>404 - Page not Found</h2>
 
 <p>Nobody but us chickens 🐔</p>
+{% endblock %}

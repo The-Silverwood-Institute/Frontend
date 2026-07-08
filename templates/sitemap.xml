@@ -1,15 +1,15 @@
-$def with (baseUrl)
 <?xml version="1.0" encoding="UTF-8"?>
 
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
   <url>
-    <loc>$baseUrl/</loc>
+    <loc>{{ baseUrl }}/</loc>
   </url>
 
-  $for listItem in fetchRecipeList():
+  {% for listItem in fetchRecipeList() %}
     <url>
-      <loc>$baseUrl/$listItem['permalink']</loc>
+      <loc>{{ baseUrl }}/{{ listItem['permalink'] }}</loc>
     </url>
+  {% endfor %}
 
 </urlset>
