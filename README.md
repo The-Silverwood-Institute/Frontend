@@ -1,10 +1,8 @@
-# F2
+# Recibase Frontend
 
-![Tests and deployment status](https://github.com/The-Silverwood-Institute/F2/actions/workflows/build.yml/badge.svg)
+![Tests and deployment status](https://github.com/The-Silverwood-Institute/Frontend/actions/workflows/build.yml/badge.svg)
 
 The website of [Recibase][recibase], the recipe ingestion and discovery service.
-
-Recibase's frontend uses [Flask][flask]. This is a migration from the original [web.py][webpy] implementation in [Frontend][frontend].
 
 ## Requirements
 
