@@ -64,11 +64,33 @@ h2 {
 
 #ingredient-tools {
   margin-left: 1.5rem;
-  overflow: auto;
+  display: flow-root;
 }
 
 #ingredient-tools #copy {
   cursor: pointer;
+  border-radius: 50%;
+}
+
+#ingredient-tools #copy.is-copied {
+  animation: copy-pulse 1s ease-out;
+}
+
+@keyframes copy-pulse {
+  0% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(97, 97, 97, 0.7);
+  }
+
+  70% {
+    transform: scale(1);
+    box-shadow: 0 0 0 10px rgba(97, 97, 97, 0);
+  }
+
+  100% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(97, 97, 97, 0);
+  }
 }
 
 #ingredient-tools span {
