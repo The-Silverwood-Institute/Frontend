@@ -118,6 +118,8 @@ def recipe(name):
             recipe=recipe_data,
             scale_factor=scale_factor,
             combined_notes=combined_notes,
+            copy_ingredients=scaler.ingredients_copy_text(
+                recipe_data['ingredients_blocks']),
         )
     else:
         return make_response(render_template('notfound.html'), 404)

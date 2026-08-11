@@ -1,3 +1,5 @@
+import copy
+
 import pytest
 from unittest.mock import MagicMock, patch
 
@@ -13,11 +15,24 @@ SAMPLE_RECIPE = {
     'image': None,
     'edit': 'https://github.com/example/edit',
     'ingredients_blocks': [{
-        'name': None,
+        'name': 'Sauce',
         'ingredients': [{
             'name': 'Onion',
             'quantity': '2',
             'prep': 'chopped',
+            'notes': None,
+        }, {
+            'name': 'Butter',
+            'quantity': '50g',
+            'prep': None,
+            'notes': None,
+        }],
+    }, {
+        'name': 'Finish',
+        'ingredients': [{
+            'name': 'butter',
+            'quantity': '150g',
+            'prep': None,
             'notes': None,
         }],
     }],
@@ -37,7 +52,7 @@ def _mock_requests_get(url, **kwargs):
         response.json.return_value = {'version': 'deadbeef'}
     elif url.endswith('recipes/test-recipe'):
         response.status_code = 200
-        response.json.return_value = SAMPLE_RECIPE
+        response.json.return_value = copy.deepcopy(SAMPLE_RECIPE)
     elif url.endswith('recipes/missing-recipe'):
         response.status_code = 404
     else:
