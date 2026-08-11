@@ -19,7 +19,7 @@
 {% endif %}
 <h3 id="ingredients-heading">Ingredients</h3>
 <div id="ingredient-tools">
-  <span id="copy" class="material-icons" title="Copy ingredients to clipboard" data-ingredients={{ copy_ingredients|tojson }}>content_copy</span>
+  <span id="copy" class="material-icons" title="Copy ingredients to clipboard" data-ingredients="{{ copy_ingredients }}">content_copy</span>
   {% for scale in [(0.5, "&frac12;"), (1, "1X"), (2, "2X"), (3, "3X")] %}
     {% set itemClass = 'is-current' if scale[0] == scale_factor else '' %}
     <span class="scaler" title="Scale by a factor of {{ scale[0] }}">
