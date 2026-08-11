@@ -19,6 +19,11 @@ SAMPLE_RECIPE = {
             'quantity': '2',
             'prep': 'chopped',
             'notes': None,
+        }, {
+            'name': 'Salt',
+            'quantity': None,
+            'prep': None,
+            'notes': None,
         }],
     }],
     'method': ['Chop onion', 'Eat'],

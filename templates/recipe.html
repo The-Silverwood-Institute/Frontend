@@ -46,7 +46,7 @@
         {% set notes = (" (" + ingredient['notes'] + ")") if ingredient['notes'] else "" %}
         {% set ingredientText = ingredient['name'] + quantity + prep + notes %}
         {% set is_scaled = 'scaled' if ingredient.get('scaled') else '' %}
-      <li><span class="ingredient {{ is_scaled }}" x-quantity="{{ ingredient['quantity'] }}" x-ingredient="{{ ingredient['name'] }}">{{ ingredientText }}</span></li>
+      <li><span class="ingredient {{ is_scaled }}" x-quantity="{{ ingredient['quantity'] or '' }}" x-ingredient="{{ ingredient['name'] }}">{{ ingredientText }}</span></li>
       {% endfor %}
     </ul>
   </div>

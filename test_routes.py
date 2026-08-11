@@ -38,6 +38,15 @@ def test_recipe_page(client):
     assert b'Chop onion' in response.data
 
 
+def test_ingredient_without_quantity_omits_none_from_copy_attr(client):
+    response = client.get('/test-recipe')
+    assert response.status_code == 200
+    body = response.data.decode()
+    assert 'x-ingredient="Salt"' in body
+    assert 'x-quantity=""' in body
+    assert 'x-quantity="None"' not in body
+
+
 def test_recipe_lowercase_redirect(client):
     response = client.get('/Test-Recipe')
     assert response.status_code == 301
