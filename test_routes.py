@@ -54,3 +54,14 @@ def test_recipe_scaling(client):
     response = client.get('/test-recipe?scale=2')
     assert response.status_code == 200
     assert b'4' in response.data
+
+
+def test_copy_js_merges_duplicate_ingredients():
+    import subprocess
+
+    result = subprocess.run(
+        ['node', 'test_copy.js'],
+        capture_output=True,
+        text=True,
+    )
+    assert result.returncode == 0, result.stdout + result.stderr
