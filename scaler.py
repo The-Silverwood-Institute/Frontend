@@ -431,3 +431,157 @@ def scale_ingredient(ingredient, factor):
     ingredient['scaled'] = True
     ingredient['quantity'] = str(quantity * factor)
     return ingredient
+
+
+def normalize_unit(suffix):
+    return (suffix or '').strip().lower()
+
+
+def is_shopping_omitted_quantity(raw_quantity):
+    if raw_quantity is None or raw_quantity == '':
+        return True
+    lowered = raw_quantity.lower().strip()
+    return lowered.endswith('tsp') or lowered.endswith('tbsp')
+
+
+def add_quantities(first, second):
+    """Sum two parsed quantities when units are compatible, else None."""
+    if isinstance(first, SimpleQuantity) and isinstance(second, SimpleQuantity):
+        if normalize_unit(first.suffix) != normalize_unit(second.suffix):
+            return None
+        return SimpleQuantity(first.quantity + second.quantity, first.suffix)
+
+    if isinstance(first, FractionQuantity) and isinstance(second, FractionQuantity):
+        if normalize_unit(first.suffix) != normalize_unit(second.suffix):
+            return None
+        return FractionQuantity(first.quantity + second.quantity, first.suffix)
+
+    if isinstance(first, MixedFractionQuantity) and isinstance(second, MixedFractionQuantity):
+        if normalize_unit(first.suffix) != normalize_unit(second.suffix):
+            return None
+        return MixedFractionQuantity(first.quantity + second.quantity, first.suffix)
+
+    summable = (SimpleQuantity, FractionQuantity, MixedFractionQuantity)
+    if isinstance(first, summable) and isinstance(second, summable):
+        if normalize_unit(first.suffix) != normalize_unit(second.suffix):
+            return None
+        total = float(first.quantity) + float(second.quantity)
+        return SimpleQuantity(total, first.suffix)
+
+    if isinstance(first, RangeQuantity) and isinstance(second, RangeQuantity):
+        if normalize_unit(first.suffix) != normalize_unit(second.suffix):
+            return None
+        return RangeQuantity(
+            first.lower_quantity + second.lower_quantity,
+            first.upper_quantity + second.upper_quantity,
+            first.suffix,
+        )
+
+    if isinstance(first, ApproximateQuantity) and isinstance(second, ApproximateQuantity):
+        if first.style != second.style or first.unit.lower() != second.unit.lower():
+            return None
+        return ApproximateQuantity(first.style, first.amount + second.amount, first.unit)
+
+    if isinstance(first, LengthQuantity) and isinstance(second, LengthQuantity):
+        if first.has_piece != second.has_piece:
+            return None
+        return LengthQuantity(
+            first.amount + second.amount,
+            first.spacing,
+            first.has_piece,
+        )
+
+    if isinstance(first, CompoundQuantity) and isinstance(second, CompoundQuantity):
+        if first.size.lower() != second.size.lower() or first.unit.lower() != second.unit.lower():
+            return None
+        return CompoundQuantity(
+            first.count + second.count,
+            first.size,
+            first.unit,
+            explicit_count=True,
+        )
+
+    if isinstance(first, ParentheticalQuantity) and isinstance(second, ParentheticalQuantity):
+        if (
+            first.unit.lower() != second.unit.lower()
+            or first.size.lower() != second.size.lower()
+            or first.approx != second.approx
+        ):
+            return None
+        return ParentheticalQuantity(
+            first.count + second.count,
+            first.unit,
+            first.size,
+            first.approx,
+        )
+
+    if isinstance(first, DescriptiveQuantity) and isinstance(second, DescriptiveQuantity):
+        if first.description.lower() != second.description.lower():
+            return None
+        return DescriptiveQuantity(first.count + second.count, first.description)
+
+    return None
+
+
+def merge_quantity_strings(existing_raw, new_raw):
+    """Merge two raw quantity strings. Returns (merged_raw, True) or (None, False)."""
+    if is_shopping_omitted_quantity(existing_raw):
+        if is_shopping_omitted_quantity(new_raw):
+            return None, True
+        return new_raw, True
+
+    if is_shopping_omitted_quantity(new_raw):
+        return existing_raw, True
+
+    existing_parsed = parse_quantity(existing_raw)
+    new_parsed = parse_quantity(new_raw)
+
+    if existing_parsed is None or new_parsed is None:
+        if existing_raw == new_raw:
+            return existing_raw, True
+        return None, False
+
+    combined = add_quantities(existing_parsed, new_parsed)
+    if combined is None:
+        return None, False
+    return str(combined), True
+
+
+def format_ingredient_for_copy(name, raw_quantity):
+    if is_shopping_omitted_quantity(raw_quantity):
+        return name
+    return '{} {}'.format(raw_quantity, name)
+
+
+def ingredients_copy_text(ingredients_blocks):
+    """Build clipboard text with duplicate ingredients merged across blocks."""
+    merged = []
+
+    for block in ingredients_blocks:
+        for ingredient in block['ingredients']:
+            name = ingredient['name']
+            raw_quantity = ingredient.get('quantity')
+            merge_target = None
+            combined_quantity = None
+
+            for item in merged:
+                if item['name'].lower() != name.lower():
+                    continue
+                combined, compatible = merge_quantity_strings(
+                    item['quantity'],
+                    raw_quantity,
+                )
+                if compatible:
+                    merge_target = item
+                    combined_quantity = combined
+                    break
+
+            if merge_target is not None:
+                merge_target['quantity'] = combined_quantity
+            else:
+                merged.append({'name': name, 'quantity': raw_quantity})
+
+    return '\n'.join(
+        format_ingredient_for_copy(item['name'], item['quantity'])
+        for item in merged
+    )

@@ -19,7 +19,7 @@
 {% endif %}
 <h3 id="ingredients-heading">Ingredients</h3>
 <div id="ingredient-tools">
-  <span id="copy" class="material-icons" title="Copy ingredients to clipboard">content_copy</span>
+  <span id="copy" class="material-icons" title="Copy ingredients to clipboard" data-ingredients="{{ copy_ingredients }}">content_copy</span>
   {% for scale in [(0.5, "&frac12;"), (1, "1X"), (2, "2X"), (3, "3X")] %}
     {% set itemClass = 'is-current' if scale[0] == scale_factor else '' %}
     <span class="scaler" title="Scale by a factor of {{ scale[0] }}">
@@ -46,7 +46,7 @@
         {% set notes = (" (" + ingredient['notes'] + ")") if ingredient['notes'] else "" %}
         {% set ingredientText = ingredient['name'] + quantity + prep + notes %}
         {% set is_scaled = 'scaled' if ingredient.get('scaled') else '' %}
-      <li><span class="ingredient {{ is_scaled }}" x-quantity="{{ ingredient['quantity'] }}" x-ingredient="{{ ingredient['name'] }}">{{ ingredientText }}</span></li>
+      <li><span class="ingredient {{ is_scaled }}">{{ ingredientText }}</span></li>
       {% endfor %}
     </ul>
   </div>

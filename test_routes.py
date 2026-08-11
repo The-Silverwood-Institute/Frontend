@@ -54,3 +54,14 @@ def test_recipe_scaling(client):
     response = client.get('/test-recipe?scale=2')
     assert response.status_code == 200
     assert b'4' in response.data
+
+
+def test_recipe_copy_ingredients_are_premerged(client):
+    response = client.get('/test-recipe')
+    assert response.status_code == 200
+    body = response.data.decode()
+    assert 'x-quantity' not in body
+    assert 'x-ingredient' not in body
+    assert 'data-ingredients=' in body
+    assert '200g Butter' in body
+    assert '2 Onion' in body

@@ -241,3 +241,59 @@ class TestScaleIngredient:
         for quantity in vague_quantities:
             ingredient = TestScaleIngredient.make_ingredient(quantity)
             assert scaler.scale_ingredient(ingredient, 2.0) == ingredient
+
+
+class TestIngredientsCopyText:
+    def test_sums_matching_quantities_case_insensitively(self):
+        blocks = [
+            {'ingredients': [{'name': 'Butter', 'quantity': '50g'}]},
+            {'ingredients': [{'name': 'butter', 'quantity': '150g'}]},
+        ]
+        assert scaler.ingredients_copy_text(blocks) == '200g Butter'
+
+    def test_keeps_incompatible_units_separate(self):
+        blocks = [{
+            'ingredients': [
+                {'name': 'Milk', 'quantity': '100ml'},
+                {'name': 'Milk', 'quantity': '50g'},
+            ],
+        }]
+        assert scaler.ingredients_copy_text(blocks) == '100ml Milk\n50g Milk'
+
+    def test_omits_tsp_tbsp_and_missing_quantities(self):
+        blocks = [{
+            'ingredients': [
+                {'name': 'Salt', 'quantity': '1tsp'},
+                {'name': 'salt', 'quantity': '1/2tsp'},
+                {'name': 'Pepper', 'quantity': None},
+            ],
+        }]
+        assert scaler.ingredients_copy_text(blocks) == 'Salt\nPepper'
+
+    def test_merges_omitted_quantity_into_concrete_quantity(self):
+        blocks = [{
+            'ingredients': [
+                {'name': 'Butter', 'quantity': None},
+                {'name': 'Butter', 'quantity': '50g'},
+            ],
+        }]
+        assert scaler.ingredients_copy_text(blocks) == '50g Butter'
+
+    def test_sums_fraction_quantities(self):
+        blocks = [{
+            'ingredients': [
+                {'name': 'Flour', 'quantity': '1/2 cup'},
+                {'name': 'Flour', 'quantity': '1/2 cup'},
+            ],
+        }]
+        assert scaler.ingredients_copy_text(blocks) == '1 cup Flour'
+
+    def test_preserves_order_of_first_occurrence(self):
+        blocks = [{
+            'ingredients': [
+                {'name': 'Butter', 'quantity': '50g'},
+                {'name': 'Sugar', 'quantity': '100g'},
+                {'name': 'butter', 'quantity': '150g'},
+            ],
+        }]
+        assert scaler.ingredients_copy_text(blocks) == '200g Butter\n100g Sugar'
