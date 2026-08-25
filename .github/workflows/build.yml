@@ -14,5 +14,5 @@ jobs:
         cache: 'pip'
     - run: pip install -r requirements.txt
     - run: pytest
-    - name: Trigger Render Deployment
-      run: curl "${{ secrets.RENDER_DEPLOY_HOOK }}&ref=${{ github.sha }}"
+    - name: Trigger Coolify Deployment
+      run: curl -fsS "${{ secrets.COOLIFY_DEPLOY_WEBHOOK }}"
