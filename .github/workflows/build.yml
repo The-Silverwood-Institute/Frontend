@@ -15,4 +15,6 @@ jobs:
     - run: pip install -r requirements.txt
     - run: pytest
     - name: Trigger Coolify Deployment
-      run: curl -fsS -H "Authorization: Bearer ${{ secrets.COOLIFY_TOKEN }}" "${{ secrets.COOLIFY_DEPLOY_WEBHOOK }}"
+      run: >
+        curl -fsS -H "Authorization: Bearer ${{ secrets.COOLIFY_TOKEN }}"
+        "${{ secrets.COOLIFY_DEPLOY_WEBHOOK }}"
