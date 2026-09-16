@@ -1,6 +1,7 @@
 import copy
 
 import pytest
+import requests
 from unittest.mock import MagicMock, patch
 
 SAMPLE_RECIPES = [
@@ -44,19 +45,27 @@ SAMPLE_RECIPE = {
 }
 
 
+def _http_error(response):
+    error = requests.HTTPError(response=response)
+    error.response = response
+    return error
+
+
 def _mock_requests_get(url, **kwargs):
     response = MagicMock()
+    response.status_code = 200
     if url.endswith('recipes/'):
         response.json.return_value = SAMPLE_RECIPES
     elif url.endswith('manifest'):
         response.json.return_value = {'version': 'deadbeef'}
     elif url.endswith('recipes/test-recipe'):
-        response.status_code = 200
         response.json.return_value = copy.deepcopy(SAMPLE_RECIPE)
     elif url.endswith('recipes/missing-recipe'):
         response.status_code = 404
+        response.raise_for_status.side_effect = _http_error(response)
     else:
         response.status_code = 404
+        response.raise_for_status.side_effect = _http_error(response)
     return response
 
 

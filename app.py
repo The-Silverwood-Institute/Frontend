@@ -13,10 +13,24 @@ app = Flask(__name__)
 backendBaseUrl = os.getenv('BACKEND_URL', "http://localhost:8081/")
 frontendVersion = os.getenv('RENDER_GIT_COMMIT', 'latest')
 
+
+class BackendUnavailable(Exception):
+    pass
+
+
+def fetch_backend_json(path):
+    try:
+        response = requests.get(backendBaseUrl + path, timeout=10)
+        response.raise_for_status()
+        return response.json()
+    except (requests.RequestException, ValueError) as error:
+        raise BackendUnavailable from error
+
+
 backendMenuFetcher = cached_backend.CachedBackendCall(
-    lambda: requests.get(backendBaseUrl + 'recipes/', timeout=10).json())
+    lambda: fetch_backend_json('recipes/'))
 backendVersion = cached_backend.CachedBackendCall(
-    lambda: requests.get(backendBaseUrl + 'manifest', timeout=10).json()['version'])
+    lambda: fetch_backend_json('manifest')['version'])
 
 
 def fetchRecipeList():
@@ -77,6 +91,11 @@ def special_exception_handler(error):
     return make_response(render_template('internalerror.html'), 500)
 
 
+@app.errorhandler(BackendUnavailable)
+def backend_unavailable(error):
+    return make_response(render_template('backendunavailable.html'), 503)
+
+
 @app.route("/random")
 def random_recipe():
     return redirect(random.choice(fetchRecipeList())['permalink'], 302)
@@ -87,42 +106,46 @@ def recipe(name):
     if name.lower() != name:
         return redirect('/' + name.lower(), 301)
 
-    response = requests.get(backendBaseUrl + 'recipes/' + name, timeout=10)
-
-    if response.status_code == 200:
+    try:
+        response = requests.get(backendBaseUrl + 'recipes/' + name, timeout=10)
+        response.raise_for_status()
         recipe_data = response.json()
+    except requests.HTTPError as error:
+        if error.response is not None and error.response.status_code == 404:
+            return make_response(render_template('notfound.html'), 404)
+        raise BackendUnavailable from error
+    except (requests.RequestException, ValueError) as error:
+        raise BackendUnavailable from error
 
-        scale_factor = scaler.get_scale_factor(request.args)
-        if scale_factor:
-            recipe_data['ingredients_blocks'] = list(map(
-                lambda b: dict(
-                    name=b['name'],
-                    ingredients=list(map(
-                        lambda i: scaler.scale_ingredient(i, scale_factor),
-                        b['ingredients'],
-                    )),
-                ),
-                recipe_data['ingredients_blocks'],
-            ))
-        else:
-            scale_factor = 1
-
-        formatted_dated_notes = [
-            '{}: {}'.format(note['date'], note['note'])
-            for note in recipe_data['dated_notes']
-        ]
-        combined_notes = recipe_data['notes'] + formatted_dated_notes
-
-        return render_template(
-            'recipe.html',
-            recipe=recipe_data,
-            scale_factor=scale_factor,
-            combined_notes=combined_notes,
-            copy_ingredients=scaler.ingredients_copy_text(
-                recipe_data['ingredients_blocks']),
-        )
+    scale_factor = scaler.get_scale_factor(request.args)
+    if scale_factor:
+        recipe_data['ingredients_blocks'] = list(map(
+            lambda b: dict(
+                name=b['name'],
+                ingredients=list(map(
+                    lambda i: scaler.scale_ingredient(i, scale_factor),
+                    b['ingredients'],
+                )),
+            ),
+            recipe_data['ingredients_blocks'],
+        ))
     else:
-        return make_response(render_template('notfound.html'), 404)
+        scale_factor = 1
+
+    formatted_dated_notes = [
+        '{}: {}'.format(note['date'], note['note'])
+        for note in recipe_data['dated_notes']
+    ]
+    combined_notes = recipe_data['notes'] + formatted_dated_notes
+
+    return render_template(
+        'recipe.html',
+        recipe=recipe_data,
+        scale_factor=scale_factor,
+        combined_notes=combined_notes,
+        copy_ingredients=scaler.ingredients_copy_text(
+            recipe_data['ingredients_blocks']),
+    )
 
 
 if __name__ == "__main__":

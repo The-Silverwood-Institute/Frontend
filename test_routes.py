@@ -1,5 +1,10 @@
 import json
 
+import requests
+from unittest.mock import patch
+
+import app
+
 
 def test_homepage(client):
     response = client.get('/')
@@ -54,6 +59,28 @@ def test_recipe_scaling(client):
     response = client.get('/test-recipe?scale=2')
     assert response.status_code == 200
     assert b'4' in response.data
+
+
+def test_homepage_backend_unavailable(flask_app, client):
+    flask_app.config['PROPAGATE_EXCEPTIONS'] = False
+    try:
+        with patch('app.fetchRecipeList', side_effect=app.BackendUnavailable):
+            response = client.get('/')
+    finally:
+        flask_app.config['PROPAGATE_EXCEPTIONS'] = True
+    assert response.status_code == 503
+    assert b'Backend Unavailable' in response.data
+
+
+def test_recipe_backend_unavailable(flask_app, client):
+    flask_app.config['PROPAGATE_EXCEPTIONS'] = False
+    try:
+        with patch('app.requests.get', side_effect=requests.ConnectionError('down')):
+            response = client.get('/test-recipe')
+    finally:
+        flask_app.config['PROPAGATE_EXCEPTIONS'] = True
+    assert response.status_code == 503
+    assert b'Backend Unavailable' in response.data
 
 
 def test_recipe_copy_ingredients_are_premerged(client):
