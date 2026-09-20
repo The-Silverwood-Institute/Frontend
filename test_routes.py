@@ -22,6 +22,25 @@ def test_manifest(client):
     }
 
 
+def test_resolve_deployed_version_prefers_source_commit():
+    assert app.resolve_deployed_version({
+        'SOURCE_COMMIT': 'abcdef1234567890',
+        'GIT_COMMIT': 'deadbeef',
+    }) == 'abcdef1234567890'
+
+
+def test_resolve_deployed_version_ignores_head_and_latest():
+    assert app.resolve_deployed_version({
+        'SOURCE_COMMIT': 'HEAD',
+        'GIT_COMMIT': 'latest',
+        'GITHUB_SHA': 'cafeba6',
+    }) == 'cafeba6'
+
+
+def test_resolve_deployed_version_falls_back_to_latest():
+    assert app.resolve_deployed_version({}) == 'latest'
+
+
 def test_sitemap(client):
     response = client.get('/sitemap.xml')
     assert response.status_code == 200

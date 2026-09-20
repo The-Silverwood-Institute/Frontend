@@ -1,6 +1,8 @@
 import json
 import os
 import random
+import re
+from pathlib import Path
 
 import requests
 from flask import Flask, make_response, redirect, render_template, request
@@ -10,8 +12,30 @@ import scaler
 
 app = Flask(__name__)
 
+COMMIT_ENV_KEYS = (
+    'SOURCE_COMMIT',
+    'GIT_COMMIT',
+    'GITHUB_SHA',
+)
+COMMIT_RE = re.compile(r'^[0-9a-fA-F]{7,40}$')
+GIT_COMMIT_FILE = Path(__file__).with_name('GIT_COMMIT')
+
+
+def resolve_deployed_version(environ=None):
+    environ = os.environ if environ is None else environ
+    for key in COMMIT_ENV_KEYS:
+        value = (environ.get(key) or '').strip()
+        if COMMIT_RE.fullmatch(value):
+            return value
+    try:
+        value = GIT_COMMIT_FILE.read_text(encoding='utf-8').strip()
+    except OSError:
+        return 'latest'
+    return value if COMMIT_RE.fullmatch(value) else 'latest'
+
+
 backendBaseUrl = os.getenv('BACKEND_URL', "http://localhost:8081/")
-frontendVersion = os.getenv('RENDER_GIT_COMMIT', 'latest')
+frontendVersion = resolve_deployed_version()
 
 
 class BackendUnavailable(Exception):
@@ -72,11 +96,10 @@ def manifest():
 
 @app.route("/sitemap.xml")
 def sitemap():
-    if "HEROKU_SLUG_COMMIT" in os.environ:
-        base_url = f"https://{request.host}"
-    else:
-        base_url = request.url_root.rstrip('/')
-    return render_template("sitemap.xml", baseUrl=base_url)
+    return render_template(
+        "sitemap.xml",
+        baseUrl=request.url_root.rstrip('/'),
+    )
 
 
 @app.errorhandler(404)

@@ -1,0 +1,14 @@
+{
+  "$schema": "https://schema.railpack.com",
+  "steps": {
+    "install": {
+      "commands": [
+        "...",
+        {
+          "cmd": "sh -c 'git rev-parse HEAD > GIT_COMMIT 2>/dev/null || true'",
+          "customName": "Record git commit"
+        }
+      ]
+    }
+  }
+}
