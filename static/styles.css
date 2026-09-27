@@ -198,6 +198,10 @@ footer a:not(:hover) {
   gap: 0.4rem 1rem;
 }
 
+.diet-flags {
+  margin-top: 0.5rem;
+}
+
 .tag-options label {
   font-weight: normal;
 }

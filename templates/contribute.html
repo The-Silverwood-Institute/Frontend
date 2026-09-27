@@ -45,6 +45,14 @@
                 <option value="{{ value }}"{% if value in form.tags %} selected{% endif %}>{{ label }}</option>
               {% endfor %}
             </select>
+            <div class="tag-options diet-flags">
+              {% for value, label in diet_checkboxes %}
+                <label>
+                  <input type="checkbox" name="tags" value="{{ value }}"{% if value in form.tags %} checked{% endif %}>
+                  {{ label }}
+                </label>
+              {% endfor %}
+            </div>
           {% else %}
             <div class="tag-options">
               {% for value, label in tags %}

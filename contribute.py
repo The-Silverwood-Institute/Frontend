@@ -44,6 +44,10 @@ TAG_GROUPS = (
     )),
 )
 
+DIET_CHECKBOXES = (
+    ("GlutenFree", "Gluten-Free"),
+)
+
 _BLANK_INGREDIENT = {
     "name": "",
     "quantity": "",

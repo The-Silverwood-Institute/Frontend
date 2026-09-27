@@ -138,6 +138,7 @@ def render_contribute(form=None, error=None, pr_url=None):
         'contribute.html',
         recipeUrl='contribute',
         tag_groups=contribute.TAG_GROUPS,
+        diet_checkboxes=contribute.DIET_CHECKBOXES,
         form=contribute.page_state(form),
         error=error,
         pr_url=pr_url,

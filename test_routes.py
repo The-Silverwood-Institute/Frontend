@@ -109,6 +109,8 @@ def test_contribute_page(client):
     assert 'Add a recipe' in body
     assert 'name="passcode"' in body
     assert 'value="VegetarianIsh"' in body
+    assert 'value="GlutenFree"' in body
+    assert 'Gluten-Free' in body
     assert 'value="NeverEaten"' not in body
     assert 'value="Popular"' not in body
     assert 'value="New"' not in body
