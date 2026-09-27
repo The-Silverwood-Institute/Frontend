@@ -178,6 +178,7 @@ footer a:not(:hover) {
 
 .contribute-form input[type="text"],
 .contribute-form input[type="password"],
+.contribute-form select,
 .contribute-form textarea {
   width: 100%;
   box-sizing: border-box;
