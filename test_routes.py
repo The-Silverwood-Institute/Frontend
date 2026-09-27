@@ -158,8 +158,10 @@ def test_contribute_submits_recipe(client):
     assert 'name="passcode"' not in body
     assert post.call_args.args[0].endswith('recipe-submissions')
     assert post.call_args.kwargs['timeout'] == 30
+    assert post.call_args.kwargs['headers'] == {
+        'Authorization': 'Bearer secret',
+    }
     assert post.call_args.kwargs['json'] == {
-        'passcode': 'secret',
         'name': 'Chilli con Carne',
         'source': "Kit's Dad",
         'description': 'Weeknight',

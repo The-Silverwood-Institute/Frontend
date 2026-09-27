@@ -121,6 +121,10 @@ def page_state(form=None):
     }
 
 
+def authorization_header(form):
+    return "Bearer " + _clean(form.get("passcode"))
+
+
 def submission_payload(form):
     ingredients = []
     for row in ingredient_rows(form):
@@ -133,7 +137,6 @@ def submission_payload(form):
         if any(ingredient.values()):
             ingredients.append(ingredient)
     return {
-        "passcode": _clean(form.get("passcode")),
         "name": _clean(form.get("name")),
         "source": _or_none(form.get("source")),
         "description": _or_none(form.get("description")),

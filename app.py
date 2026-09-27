@@ -147,6 +147,9 @@ def contribute_page():
         response = requests.post(
             backendBaseUrl + 'recipe-submissions',
             json=payload,
+            headers={
+                'Authorization': contribute.authorization_header(request.form),
+            },
             timeout=30,
         )
     except requests.RequestException:
