@@ -7,6 +7,7 @@
 {% if pr_url %}
   <p class="form-success">Pull request opened. <a href="{{ pr_url }}">Review it on GitHub</a>. It is not published until that request is merged.</p>
   <p><a href="/contribute">Add another recipe</a></p>
+  <script>document.cookie = "recipe_draft=; Max-Age=0; Path=/contribute; SameSite=Lax";</script>
 {% else %}
   <p>This opens a pull request against Recibase. The recipe stays unpublished until that request is merged.</p>
   {% if error %}
@@ -111,8 +112,11 @@
       data-action="contribute"
     ></div>
 
+    <p class="draft-note">Drafts saved for 7 days using a cookie, or until submitted.</p>
     <div class="row-actions">
       <button type="submit">Open pull request</button>
+      <button type="button" id="save-draft">Save Draft</button>
+      <button type="button" id="delete-draft" hidden>Delete Draft</button>
     </div>
   </form>
   <script

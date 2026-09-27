@@ -238,9 +238,25 @@ footer a:not(:hover) {
   opacity: 0.6;
 }
 
+.draft-note {
+  margin: 1.25rem 0 0;
+}
+
+.row-actions {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.row-actions button {
+  margin-top: 0.5rem;
+}
+
 @media (max-width: 600px) {
-  .contribute-form button[type="submit"] {
-    width: 100%;
+  .row-actions button {
+    padding-left: 0.55rem;
+    padding-right: 0.55rem;
   }
 }
 

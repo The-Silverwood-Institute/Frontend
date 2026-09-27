@@ -118,6 +118,9 @@ def test_contribute_page(client):
     assert 'data-sitekey="0x4AAAAAAFFMifPD-G1JDoui"' in body
     assert 'data-action="contribute"' in body
     assert 'https://challenges.cloudflare.com/turnstile/v0/api.js' in body
+    assert 'Drafts saved for 7 days using a cookie, or until submitted.' in body
+    assert 'Save Draft' in body
+    assert 'Delete Draft' in body
     assert 'mdl-navigation__link add-recipe is-current' in body
 
 
