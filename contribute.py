@@ -40,7 +40,6 @@ TAG_GROUPS = (
     ("Good to know", (
         ("Freezes", "Freezes"),
         ("BetterNextDay", "Better Next Day"),
-        ("AI", "AI"),
     )),
 )
 
