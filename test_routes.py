@@ -17,7 +17,7 @@ def test_manifest(client):
     assert response.status_code == 200
     assert response.content_type == 'text/json'
     assert json.loads(response.data) == {
-        'version': 'latest',
+        'version': app.frontendVersion,
         'apiUrl': 'http://localhost:8081/',
     }
 
