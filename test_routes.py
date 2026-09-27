@@ -112,6 +112,10 @@ def test_contribute_page(client):
     assert 'value="NeverEaten"' not in body
     assert 'value="Popular"' not in body
     assert 'value="New"' not in body
+    assert 'class="cf-turnstile"' in body
+    assert 'data-sitekey="0x4AAAAAAFFMifPD-G1JDoui"' in body
+    assert 'data-action="contribute"' in body
+    assert 'https://challenges.cloudflare.com/turnstile/v0/api.js' in body
     assert 'mdl-navigation__link add-recipe is-current' in body
 
 
@@ -141,6 +145,7 @@ def test_contribute_submits_recipe(client):
             'ingredient_prep': ['', '', 'crushed'],
             'ingredient_notes': ['', '', ''],
             'method': 'Brown the mince.\n\nServe.',
+            'cf-turnstile-response': 'token',
         })
     assert response.status_code == 200
     body = response.data.decode()
@@ -170,6 +175,8 @@ def test_contribute_submits_recipe(client):
             },
         ],
         'method': ['Brown the mince.', 'Serve.'],
+        'cf-turnstile-response': 'token',
+        'remoteip': '127.0.0.1',
     }
 
 

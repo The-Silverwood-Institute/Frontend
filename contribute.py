@@ -54,6 +54,7 @@ _BLANK_INGREDIENT = {
 _FALLBACK_ERRORS = {
     401: "Invalid passcode.",
     409: "A recipe with this name already exists.",
+    403: "Could not verify this submission.",
     502: "Could not open the pull request. Try again.",
     503: "Recipe submission is not available.",
 }
@@ -116,7 +117,7 @@ def page_state(form=None):
     }
 
 
-def submission_payload(form):
+def submission_payload(form, remote_ip=""):
     ingredients = []
     for row in ingredient_rows(form):
         ingredient = {
@@ -136,6 +137,8 @@ def submission_payload(form):
         "tags": [_clean(tag) for tag in form.getlist("tags") if _clean(tag)],
         "ingredients": ingredients,
         "method": _lines(form.get("method")),
+        "cf-turnstile-response": _clean(form.get("cf-turnstile-response")),
+        "remoteip": _clean(remote_ip),
     }
 
 

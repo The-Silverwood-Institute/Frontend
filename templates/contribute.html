@@ -88,10 +88,21 @@
       <textarea name="notes" rows="4" placeholder="One note per line">{{ form.notes }}</textarea>
     </label>
 
+    <div
+      class="cf-turnstile"
+      data-sitekey="0x4AAAAAAFFMifPD-G1JDoui"
+      data-action="contribute"
+    ></div>
+
     <div class="row-actions">
       <button type="submit">Open pull request</button>
     </div>
   </form>
+  <script
+    src="https://challenges.cloudflare.com/turnstile/v0/api.js"
+    async
+    defer
+  ></script>
   <script src="/static/contribute.js?v={{ config.frontendVersion }}"></script>
 {% endif %}
 {% endblock %}

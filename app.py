@@ -125,6 +125,14 @@ def random_recipe():
     return redirect(random.choice(fetchRecipeList())['permalink'], 302)
 
 
+def client_ip():
+    forwarded = request.headers.get("X-Forwarded-For", "")
+    first = forwarded.split(",")[0].strip()
+    if first:
+        return first
+    return request.remote_addr or ""
+
+
 def render_contribute(form=None, error=None, pr_url=None):
     return render_template(
         'contribute.html',
@@ -141,7 +149,10 @@ def contribute_page():
     if request.method == "GET":
         return render_contribute()
 
-    payload = contribute.submission_payload(request.form)
+    payload = contribute.submission_payload(
+        request.form,
+        remote_ip=client_ip(),
+    )
     try:
         response = requests.post(
             backendBaseUrl + 'recipe-submissions',
