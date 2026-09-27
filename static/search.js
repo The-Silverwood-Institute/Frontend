@@ -59,6 +59,9 @@ function searchRecipes() {
 
 function filterRecipes(searchTerm, urls) {
   menuItems.forEach(menuItem => {
+    if (menuItem.classList.contains("add-recipe")) {
+      return;
+    }
     const match = menuItem.text.toLowerCase().includes(searchTerm.toLowerCase())
                     || urls.has(menuItem.getAttribute('href'));
 
@@ -75,7 +78,9 @@ function onSearchSubmit(e) {
   clearTimeout(searchTimer);
 
   searchRecipes().finally(() => {
-    visibleMenuItems = document.querySelectorAll(".mdl-navigation__link:not([hidden])");
+    visibleMenuItems = document.querySelectorAll(
+      ".mdl-navigation__link:not(.add-recipe):not([hidden])"
+    );
 
     if (visibleMenuItems.length == 1) {
       window.location.href = visibleMenuItems[0].getAttribute("href");

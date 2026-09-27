@@ -69,6 +69,7 @@
     </form>
     <nav class="mdl-navigation">
       {% set current_recipe_url = recipeUrl|default('') %}
+      <a class="mdl-navigation__link add-recipe{{ ' is-current' if current_recipe_url == 'contribute' else '' }}" href="/contribute">Add a recipe</a>
       {% for listItem in fetchRecipeList() %}
         <a class="mdl-navigation__link {{ 'is-current' if listItem['permalink'] == current_recipe_url }}" href="{{ listItem['permalink'] }}">{{ listItem['name'] }}</a>
       {% endfor %}

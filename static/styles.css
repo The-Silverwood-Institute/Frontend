@@ -148,6 +148,108 @@ footer a:not(:hover) {
   color: grey;
 }
 
+.mdl-navigation__link.add-recipe {
+  font-weight: 500;
+}
+
+.form-error {
+  background: #fdecea;
+  padding: 0.75rem 1rem;
+  border-radius: 4px;
+}
+
+.contribute-form .field {
+  display: block;
+  margin-top: 1rem;
+}
+
+.contribute-form .field span,
+.contribute-form legend,
+.tag-group h3 {
+  display: block;
+  font-weight: 500;
+  margin-bottom: 0.25rem;
+}
+
+.tag-group h3 {
+  font-size: 0.95rem;
+  margin-top: 0.75rem;
+}
+
+.contribute-form input[type="text"],
+.contribute-form input[type="password"],
+.contribute-form textarea {
+  width: 100%;
+  box-sizing: border-box;
+  font: inherit;
+  padding: 0.6rem;
+}
+
+.contribute-form fieldset {
+  border: 0;
+  margin: 1.5rem 0 0;
+  padding: 0;
+}
+
+.tag-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1rem;
+}
+
+.tag-options label {
+  font-weight: normal;
+}
+
+.ingredient-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.25rem 0.75rem;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.ingredient-row .field {
+  margin-top: 0.25rem;
+}
+
+.contribute-form button {
+  font: inherit;
+  margin-top: 0.75rem;
+  padding: 0.6rem 1rem;
+  border-radius: 4px;
+  border: 1px solid #3f51b5;
+  background: white;
+  color: #3f51b5;
+}
+
+.contribute-form button[type="submit"] {
+  background: #3f51b5;
+  color: white;
+}
+
+.contribute-form button:disabled {
+  opacity: 0.6;
+}
+
+@media (max-width: 600px) {
+  .contribute-form button[type="submit"] {
+    width: 100%;
+  }
+}
+
+@media (min-width: 800px) {
+  .ingredient-row {
+    grid-template-columns: 2fr 1fr 1fr 1.5fr auto;
+    align-items: end;
+  }
+
+  .ingredient-row button {
+    margin-top: 0;
+  }
+}
+
 @media (min-width: 1025px) {
   section.mdl-grid {
     padding-left: 20px;

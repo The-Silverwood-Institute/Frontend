@@ -8,6 +8,7 @@ import requests
 from flask import Flask, make_response, redirect, render_template, request
 
 import cached_backend
+import contribute
 import scaler
 
 app = Flask(__name__)
@@ -122,6 +123,54 @@ def backend_unavailable(error):
 @app.route("/random")
 def random_recipe():
     return redirect(random.choice(fetchRecipeList())['permalink'], 302)
+
+
+def render_contribute(form=None, error=None, pr_url=None):
+    return render_template(
+        'contribute.html',
+        recipeUrl='contribute',
+        tag_groups=contribute.TAG_GROUPS,
+        form=contribute.page_state(form),
+        error=error,
+        pr_url=pr_url,
+    )
+
+
+@app.route("/contribute", methods=["GET", "POST"])
+def contribute_page():
+    if request.method == "GET":
+        return render_contribute()
+
+    payload = contribute.submission_payload(request.form)
+    try:
+        response = requests.post(
+            backendBaseUrl + 'recipe-submissions',
+            json=payload,
+            timeout=30,
+        )
+    except requests.RequestException:
+        return render_contribute(
+            request.form,
+            error='Could not reach the recipe API. Nothing was submitted.',
+        )
+
+    if response.status_code == 200:
+        try:
+            body = response.json()
+        except ValueError:
+            body = None
+        url = contribute.pull_request_url(body)
+        if url is None:
+            return render_contribute(
+                request.form,
+                error='The recipe API did not return a pull request link.',
+            )
+        return render_contribute(pr_url=url)
+
+    return render_contribute(
+        request.form,
+        error=contribute.failure_message(response),
+    )
 
 
 @app.route("/<name>")

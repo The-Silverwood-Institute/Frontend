@@ -1,7 +1,7 @@
 import json
 
 import requests
-from unittest.mock import patch
+from unittest.mock import MagicMock, patch
 
 import app
 
@@ -100,6 +100,179 @@ def test_recipe_backend_unavailable(flask_app, client):
         flask_app.config['PROPAGATE_EXCEPTIONS'] = True
     assert response.status_code == 503
     assert b'Backend Unavailable' in response.data
+
+
+def test_contribute_page(client):
+    response = client.get('/contribute')
+    assert response.status_code == 200
+    body = response.data.decode()
+    assert 'Add a recipe' in body
+    assert 'name="passcode"' in body
+    assert 'value="VegetarianIsh"' in body
+    assert 'value="NeverEaten"' not in body
+    assert 'value="Popular"' not in body
+    assert 'value="New"' not in body
+    assert 'mdl-navigation__link add-recipe is-current' in body
+
+
+def test_contribute_link_in_drawer(client):
+    response = client.get('/')
+    body = response.data.decode()
+    assert 'href="/contribute"' in body
+    assert 'add-recipe is-current' not in body
+
+
+def test_contribute_submits_recipe(client):
+    mock_response = MagicMock()
+    mock_response.status_code = 200
+    mock_response.json.return_value = {
+        'url': 'https://github.com/The-Silverwood-Institute/Recibase/pull/12',
+    }
+    with patch('app.requests.post', return_value=mock_response) as post:
+        response = client.post('/contribute', data={
+            'passcode': ' secret ',
+            'name': ' Chilli con Carne ',
+            'source': "Kit's Dad",
+            'description': ' Weeknight ',
+            'notes': 'Rest overnight\n\n',
+            'tags': ['Spicy', 'Scales'],
+            'ingredient_name': ['Mince', '  ', 'Garlic'],
+            'ingredient_quantity': ['500g', '', ''],
+            'ingredient_prep': ['', '', 'crushed'],
+            'ingredient_notes': ['', '', ''],
+            'method': 'Brown the mince.\n\nServe.',
+        })
+    assert response.status_code == 200
+    body = response.data.decode()
+    assert 'https://github.com/The-Silverwood-Institute/Recibase/pull/12' in body
+    assert 'name="passcode"' not in body
+    assert post.call_args.args[0].endswith('recipe-submissions')
+    assert post.call_args.kwargs['timeout'] == 30
+    assert post.call_args.kwargs['json'] == {
+        'passcode': 'secret',
+        'name': 'Chilli con Carne',
+        'source': "Kit's Dad",
+        'description': 'Weeknight',
+        'notes': ['Rest overnight'],
+        'tags': ['Spicy', 'Scales'],
+        'ingredients': [
+            {
+                'name': 'Mince',
+                'quantity': '500g',
+                'prep': None,
+                'notes': None,
+            },
+            {
+                'name': 'Garlic',
+                'quantity': None,
+                'prep': 'crushed',
+                'notes': None,
+            },
+        ],
+        'method': ['Brown the mince.', 'Serve.'],
+    }
+
+
+def test_contribute_keeps_form_on_api_error(client):
+    mock_response = MagicMock()
+    mock_response.status_code = 401
+    mock_response.headers = {'Content-Type': 'text/plain'}
+    mock_response.text = 'invalid passcode'
+    mock_response.json.side_effect = ValueError('not json')
+    with patch('app.requests.post', return_value=mock_response):
+        response = client.post('/contribute', data={
+            'passcode': 'nope',
+            'name': 'Soup',
+            'source': '',
+            'description': '',
+            'notes': '',
+            'tags': ['Spicy'],
+            'ingredient_name': ['Onion'],
+            'ingredient_quantity': ['1'],
+            'ingredient_prep': [''],
+            'ingredient_notes': ['Optional'],
+            'method': 'Simmer.',
+        })
+    assert response.status_code == 200
+    body = response.data.decode()
+    assert 'invalid passcode' in body
+    assert 'value="Soup"' in body
+    assert 'value="Onion"' in body
+    assert 'value="Optional"' in body
+    assert 'value="Spicy" checked' in body
+    assert 'Pull request opened' not in body
+
+
+def test_contribute_shows_json_error(client):
+    mock_response = MagicMock()
+    mock_response.status_code = 400
+    mock_response.headers = {'Content-Type': 'application/json'}
+    mock_response.text = '{"error": "Add at least one ingredient."}'
+    mock_response.json.return_value = {'error': 'Add at least one ingredient.'}
+    with patch('app.requests.post', return_value=mock_response):
+        response = client.post('/contribute', data={
+            'passcode': 'secret',
+            'name': 'Empty',
+            'method': 'Stir.',
+        })
+    assert response.status_code == 200
+    assert 'Add at least one ingredient.' in response.data.decode()
+
+
+def test_contribute_rejects_unexpected_pull_request_url(client):
+    mock_response = MagicMock()
+    mock_response.status_code = 200
+    mock_response.json.return_value = {'url': 'javascript:alert(1)'}
+    with patch('app.requests.post', return_value=mock_response):
+        response = client.post('/contribute', data={
+            'passcode': 'secret',
+            'name': 'Soup',
+            'ingredient_name': ['Onion'],
+            'ingredient_quantity': ['1'],
+            'ingredient_prep': [''],
+            'ingredient_notes': [''],
+            'method': 'Simmer.',
+        })
+    body = response.data.decode()
+    assert 'javascript:alert(1)' not in body
+    assert 'did not return a pull request link' in body
+    assert 'value="Soup"' in body
+
+
+def test_contribute_escapes_redisplayed_values(client):
+    mock_response = MagicMock()
+    mock_response.status_code = 502
+    mock_response.headers = {'Content-Type': 'text/plain'}
+    mock_response.text = 'upstream failed'
+    mock_response.json.side_effect = ValueError('not json')
+    with patch('app.requests.post', return_value=mock_response):
+        response = client.post('/contribute', data={
+            'passcode': 'secret',
+            'name': '<script>alert(1)</script>',
+            'ingredient_name': ['Onion'],
+            'ingredient_quantity': ['1'],
+            'ingredient_prep': [''],
+            'ingredient_notes': [''],
+            'method': 'Simmer.',
+        })
+    body = response.data.decode()
+    assert '<script>alert(1)</script>' not in body
+    assert '&lt;script&gt;alert(1)&lt;/script&gt;' in body
+    assert 'upstream failed' in body
+
+
+def test_contribute_reports_unreachable_api(client):
+    with patch('app.requests.post', side_effect=requests.ConnectionError('down')):
+        response = client.post('/contribute', data={
+            'passcode': 'secret',
+            'name': 'Soup',
+            'method': 'Simmer.',
+        })
+    assert response.status_code == 200
+    body = response.data.decode()
+    assert 'Could not reach the recipe API' in body
+    assert 'value="Soup"' in body
+    assert 'Backend Unavailable' not in body
 
 
 def test_recipe_copy_ingredients_are_premerged(client):
