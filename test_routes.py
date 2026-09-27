@@ -181,7 +181,6 @@ def test_contribute_submits_recipe(client):
         ],
         'method': ['Brown the mince.', 'Serve.'],
         'cf-turnstile-response': 'token',
-        'remoteip': '127.0.0.1',
     }
 
 

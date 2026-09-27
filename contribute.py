@@ -121,7 +121,7 @@ def page_state(form=None):
     }
 
 
-def submission_payload(form, remote_ip=""):
+def submission_payload(form):
     ingredients = []
     for row in ingredient_rows(form):
         ingredient = {
@@ -142,7 +142,6 @@ def submission_payload(form, remote_ip=""):
         "ingredients": ingredients,
         "method": _lines(form.get("method")),
         "cf-turnstile-response": _clean(form.get("cf-turnstile-response")),
-        "remoteip": _clean(remote_ip),
     }
 
 
