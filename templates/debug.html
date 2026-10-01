@@ -4,7 +4,7 @@
 <h2>Secret Debug Page</h2>
 <p>
   Frontend
-  <a href="https://github.com/The-Silverwood-Institute/Frontend/commit/{{ config.frontendVersion }}">{{ config.frontendVersion[:6] }}</a>
+  v<a href="https://github.com/The-Silverwood-Institute/Frontend/commit/{{ config.frontendVersion }}">{{ config.frontendVersion[:6] }}</a>
 </p>
 {% set api = fetchApiManifest() %}
 <table class="backends mdl-data-table mdl-js-data-table mdl-shadow--2dp">
@@ -22,7 +22,7 @@
   <tbody>
     <tr>
       <td class="mdl-data-table__cell--non-numeric"><a href="{{ api.source_url }}">{{ api.name }}</a></td>
-      <td class="mdl-data-table__cell--non-numeric"><a href="{{ api.base_commit_url }}{{ api.version }}">v{{ api.version[:6] }}</a></td>
+      <td class="mdl-data-table__cell--non-numeric"><a href="{{ api.base_commit_url }}{{ api.version }}">{{ api.version[:6] }}</a></td>
       <td class="mdl-data-table__cell--non-numeric"><a href="{{ backend_url }}">{{ backend_url }}</a></td>
       <td>{{ recipe_count }}</td>
       <td>{{ menu_cache_age|round(0, 'floor')|int }}s</td>
