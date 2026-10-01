@@ -55,11 +55,12 @@ def test_debug_page(client):
     assert response.status_code == 200
     body = response.data.decode()
     assert 'Secret Debug Page' in body
+    assert '<caption>Backends</caption>' in body
     assert 'https://github.com/The-Silverwood-Institute/Recibase">Recibase' in body
     assert 'https://github.com/The-Silverwood-Institute/Recibase/commit/deadbeef' in body
     assert f'https://github.com/The-Silverwood-Institute/Frontend/commit/{app.frontendVersion}' in body
     assert 'http://localhost:8081/' in body
-    assert 'Recipes fetched: 1' in body
+    assert '>1<' in body
     assert 'Menu cache' in body
     assert 'Version cache' in body
 

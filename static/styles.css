@@ -285,6 +285,27 @@ footer a:not(:hover) {
   }
 }
 
+table.backends {
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+
+table.backends caption {
+  caption-side: top;
+  text-align: left;
+  font-size: 1.25rem;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+
+table.backends th,
+table.backends td {
+  text-align: left;
+  padding: 0.4rem 1rem 0.4rem 0;
+  border-bottom: 1px solid #e0e0e0;
+  vertical-align: top;
+}
+
 @media (min-width: 1025px) {
   section.mdl-grid {
     padding-left: 20px;
