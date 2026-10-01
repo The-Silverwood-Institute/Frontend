@@ -122,7 +122,15 @@ def backend_unavailable(error):
 
 @app.route("/debug")
 def debug_page():
-    return render_template('debug.html')
+    recipes = fetchRecipeList()
+    fetchApiVersion()
+    return render_template(
+        'debug.html',
+        backend_url=backendBaseUrl,
+        recipe_count=len(recipes),
+        menu_cache_age=backendMenuFetcher.age_seconds(),
+        version_cache_age=backendVersion.age_seconds(),
+    )
 
 
 @app.route("/random")

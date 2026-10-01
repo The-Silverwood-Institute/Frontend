@@ -57,6 +57,10 @@ def test_debug_page(client):
     assert 'Secret Debug Page' in body
     assert 'https://github.com/The-Silverwood-Institute/Recibase/commit/deadbeef' in body
     assert f'https://github.com/The-Silverwood-Institute/Frontend/commit/{app.frontendVersion}' in body
+    assert 'http://localhost:8081/' in body
+    assert 'Recipes 1' in body
+    assert 'Menu cache' in body
+    assert 'Version cache' in body
 
 
 def test_footer_omits_deployed_versions(client):

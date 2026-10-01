@@ -10,4 +10,8 @@
   Frontend
   <a href="https://github.com/The-Silverwood-Institute/Frontend/commit/{{ config.frontendVersion }}">{{ config.frontendVersion[:6] }}</a>
 </p>
+<p>Backend URL: <a href="{{ backend_url }}">{{ backend_url }}</a></p>
+<p>Recipes fetched: {{ recipe_count }}</p>
+<p>Menu cache age: {{ menu_cache_age|round(0, 'floor')|int }}s</p>
+<p>Version cache age: {{ version_cache_age|round(0, 'floor')|int }}s</p>
 {% endblock %}

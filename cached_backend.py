@@ -21,3 +21,8 @@ class CachedBackendCall:
             self.__fetch_data()
 
         return self.__data
+
+    def age_seconds(self):
+        if self.__last_fetched == 0:
+            return None
+        return time.time() - self.__last_fetched
