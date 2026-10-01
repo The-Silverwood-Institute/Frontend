@@ -148,6 +148,20 @@ footer a:not(:hover) {
   color: grey;
 }
 
+#pi-mark {
+  position: fixed;
+  right: 0.5rem;
+  bottom: 0.25rem;
+  z-index: 10;
+  margin: 0;
+  padding: 0.25rem 0.4rem;
+  border: 0;
+  background: transparent;
+  color: grey;
+  font: inherit;
+  cursor: pointer;
+}
+
 .mdl-navigation__link.add-recipe {
   font-weight: 500;
 }

@@ -47,6 +47,25 @@ def test_sitemap(client):
     body = response.data.decode()
     assert '<urlset' in body
     assert 'test-recipe' in body
+    assert '/debug' not in body
+
+
+def test_debug_page(client):
+    response = client.get('/debug')
+    assert response.status_code == 200
+    body = response.data.decode()
+    assert 'Secret Debug Page' in body
+    assert 'https://github.com/The-Silverwood-Institute/Recibase/commit/deadbeef' in body
+    assert f'https://github.com/The-Silverwood-Institute/Frontend/commit/{app.frontendVersion}' in body
+
+
+def test_footer_omits_deployed_versions(client):
+    response = client.get('/')
+    body = response.data.decode()
+    assert 'Source Code' in body
+    assert 'github.com/The-Silverwood-Institute/Recibase/commit/' not in body
+    assert 'id="pi-mark"' in body
+    assert '/static/pi.js' in body
 
 
 def test_random_recipe_redirects(client):

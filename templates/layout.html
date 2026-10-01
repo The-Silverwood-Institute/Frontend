@@ -37,6 +37,7 @@
   <script defer src="/static/search.js?v={{ config.frontendVersion }}"></script>
   <script defer src="/static/copy.js?v={{ config.frontendVersion }}"></script>
   <script defer src="/static/wakelock.js?v={{ config.frontendVersion }}"></script>
+  <script defer src="/static/pi.js?v={{ config.frontendVersion }}"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   {% if imageSrc is defined and imageSrc %}
@@ -83,10 +84,10 @@
     </section>
   </main>
   <footer>
-    v<a href="https://github.com/The-Silverwood-Institute/Recibase/commit/{{ fetchApiVersion() }}">{{ fetchApiVersion()[:6] }}</a>.<a href="https://github.com/The-Silverwood-Institute/Frontend/commit/{{ config.frontendVersion }}">{{ config.frontendVersion[:6] }}</a>
-    | <a href="https://github.com/The-Silverwood-Institute/Recibase">Source Code</a>
+    <a href="https://github.com/The-Silverwood-Institute/Recibase">Source Code</a>
     | <a href="https://c.reciba.se/">Meal Planner</a>
   </footer>
+  <button type="button" id="pi-mark" aria-label="Pi">π</button>
 </div>
 </body>
 </html>

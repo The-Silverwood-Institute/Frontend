@@ -120,6 +120,11 @@ def backend_unavailable(error):
     return make_response(render_template('backendunavailable.html'), 503)
 
 
+@app.route("/debug")
+def debug_page():
+    return render_template('debug.html')
+
+
 @app.route("/random")
 def random_recipe():
     return redirect(random.choice(fetchRecipeList())['permalink'], 302)
