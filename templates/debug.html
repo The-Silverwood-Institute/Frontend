@@ -3,8 +3,10 @@
 {% block content %}
 <h2>Secret Debug Page</h2>
 <p>
+  {% set api = fetchApiManifest() %}
   Backend
-  <a href="https://github.com/The-Silverwood-Institute/Recibase/commit/{{ fetchApiVersion() }}">{{ fetchApiVersion()[:6] }}</a>
+  <a href="{{ api.source_url }}">{{ api.name }}</a>
+  <a href="{{ api.base_commit_url }}{{ api.version }}">{{ api.version[:6] }}</a>
 </p>
 <p>
   Frontend

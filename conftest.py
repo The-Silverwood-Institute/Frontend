@@ -57,7 +57,12 @@ def _mock_requests_get(url, **kwargs):
     if url.endswith('recipes/'):
         response.json.return_value = SAMPLE_RECIPES
     elif url.endswith('manifest'):
-        response.json.return_value = {'version': 'deadbeef'}
+        response.json.return_value = {
+            'version': 'deadbeef',
+            'name': 'Recibase',
+            'source_url': 'https://github.com/The-Silverwood-Institute/Recibase',
+            'base_commit_url': 'https://github.com/The-Silverwood-Institute/Recibase/commit/',
+        }
     elif url.endswith('recipes/test-recipe'):
         response.json.return_value = copy.deepcopy(SAMPLE_RECIPE)
     elif url.endswith('recipes/missing-recipe'):

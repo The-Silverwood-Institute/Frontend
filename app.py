@@ -54,23 +54,23 @@ def fetch_backend_json(path):
 
 backendMenuFetcher = cached_backend.CachedBackendCall(
     lambda: fetch_backend_json('recipes/'))
-backendVersion = cached_backend.CachedBackendCall(
-    lambda: fetch_backend_json('manifest')['version'])
+backendManifest = cached_backend.CachedBackendCall(
+    lambda: fetch_backend_json('manifest'))
 
 
 def fetchRecipeList():
     return backendMenuFetcher.fetch_data()
 
 
-def fetchApiVersion():
-    return backendVersion.fetch_data()
+def fetchApiManifest():
+    return backendManifest.fetch_data()
 
 
 @app.context_processor
 def inject_globals():
     return dict(
         fetchRecipeList=fetchRecipeList,
-        fetchApiVersion=fetchApiVersion,
+        fetchApiManifest=fetchApiManifest,
     )
 
 
@@ -123,13 +123,13 @@ def backend_unavailable(error):
 @app.route("/debug")
 def debug_page():
     recipes = fetchRecipeList()
-    fetchApiVersion()
+    fetchApiManifest()
     return render_template(
         'debug.html',
         backend_url=backendBaseUrl,
         recipe_count=len(recipes),
         menu_cache_age=backendMenuFetcher.age_seconds(),
-        version_cache_age=backendVersion.age_seconds(),
+        version_cache_age=backendManifest.age_seconds(),
     )
 
 
