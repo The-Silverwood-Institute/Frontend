@@ -285,6 +285,18 @@ footer a:not(:hover) {
   }
 }
 
+/* MDL sizes .mdl-layout__content as an inline-block and hides horizontal
+   overflow, so a nowrap data table widens the page and gets clipped. */
+main.mdl-layout__content:has(.backends-wrap) {
+  min-width: 0;
+  overflow-x: auto;
+}
+
+.backends-wrap {
+  max-width: 100%;
+  min-width: 0;
+}
+
 table.backends {
   border-collapse: collapse;
   margin-top: 1rem;
@@ -304,6 +316,55 @@ table.backends td {
   padding: 0.4rem 1rem 0.4rem 0;
   border-bottom: 1px solid #e0e0e0;
   vertical-align: top;
+}
+
+@media (max-width: 720px) {
+  table.backends {
+    white-space: normal;
+    width: 100%;
+  }
+
+  table.backends thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  table.backends,
+  table.backends tbody,
+  table.backends tr,
+  table.backends.mdl-data-table tbody tr,
+  table.backends td,
+  table.backends.mdl-data-table td {
+    display: block;
+    height: auto;
+    white-space: normal;
+  }
+
+  table.backends td {
+    padding: 0.65rem 0.75rem;
+    text-align: left;
+  }
+
+  table.backends td::before {
+    content: attr(data-label);
+    display: block;
+    margin-bottom: 0.15rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  table.backends td a {
+    overflow-wrap: anywhere;
+  }
 }
 
 @media (min-width: 1025px) {
