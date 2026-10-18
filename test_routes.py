@@ -158,6 +158,40 @@ def test_recipe_scaling(client):
     assert b'4' in response.data
 
 
+def test_recipe_strips_method_quantity_syntax(client):
+    recipe = {
+        **app.requests.get('http://backend/recipes/test-recipe').json(),
+    }
+    recipe['method'] = [
+        'Add {250ml} cold water and {2 tsp} sugar.',
+    ]
+
+    with patch('app.requests.get', return_value=_recipe_response(recipe)):
+        response = client.get('/test-recipe')
+
+    body = response.data.decode()
+    assert 'Add 250ml cold water and 2 tsp sugar.' in body
+    assert '{250ml}' not in body
+    assert 'class="scaled"' not in body
+
+
+def test_recipe_scales_method_quantities(client):
+    recipe = {
+        **app.requests.get('http://backend/recipes/test-recipe').json(),
+    }
+    recipe['method'] = [
+        'Add {250ml} cold water and {2 tsp} sugar.',
+    ]
+
+    with patch('app.requests.get', return_value=_recipe_response(recipe)):
+        response = client.get('/test-recipe?scale=2')
+
+    body = response.data.decode()
+    assert '<span class="scaled">500ml</span>' in body
+    assert '<span class="scaled">4 tsp</span>' in body
+    assert '{250ml}' not in body
+
+
 def test_homepage_backend_unavailable(flask_app, client):
     flask_app.config['PROPAGATE_EXCEPTIONS'] = False
     try:

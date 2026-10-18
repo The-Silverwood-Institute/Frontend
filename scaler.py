@@ -420,6 +420,24 @@ def parse_quantity(raw_quantity):
     return None
 
 
+METHOD_QUANTITY = re.compile(r'\{([^{}]+)\}')
+
+
+def scale_method_step(step, factor):
+    """Scale brace-marked quantities, or strip the braces when unscaled."""
+
+    def replace(match):
+        raw = match.group(1).strip()
+        if not factor:
+            return raw
+        quantity = parse_quantity(raw)
+        if quantity is None:
+            return raw
+        return '<span class="scaled">{}</span>'.format(quantity * factor)
+
+    return METHOD_QUANTITY.sub(replace, step)
+
+
 def scale_ingredient(ingredient, factor):
     if ingredient['quantity'] is None:
         return ingredient

@@ -39,6 +39,30 @@ class TestGetScaleFactor:
         assert scaler.get_scale_factor(TestGetScaleFactor.make_param('51')) == None
         assert scaler.get_scale_factor(TestGetScaleFactor.make_param('1000')) == None
 
+class TestScaleMethodStep:
+    def test_strips_braces_when_unscaled(self):
+        step = 'Add {250ml} cold water and {2 tsp} sugar.'
+        assert scaler.scale_method_step(step, None) == (
+            'Add 250ml cold water and 2 tsp sugar.'
+        )
+
+    def test_scales_and_highlights_quantities(self):
+        step = 'Add {250ml} cold water and {2 tsp} sugar.'
+        assert scaler.scale_method_step(step, 2) == (
+            'Add <span class="scaled">500ml</span> cold water and '
+            '<span class="scaled">4 tsp</span> sugar.'
+        )
+
+    def test_strips_unparseable_quantities_without_highlight(self):
+        step = 'Add {a pinch} of salt.'
+        assert scaler.scale_method_step(step, 2) == 'Add a pinch of salt.'
+
+    def test_leaves_unmarked_text_unchanged(self):
+        step = 'Cook for 4-5 minutes.'
+        assert scaler.scale_method_step(step, 2) == step
+        assert scaler.scale_method_step(step, None) == step
+
+
 class TestScaleIngredient:
     @staticmethod
     def make_ingredient(quantity):

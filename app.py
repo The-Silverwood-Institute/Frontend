@@ -214,6 +214,10 @@ def recipe(name):
         raise BackendUnavailable from error
 
     scale_factor = scaler.get_scale_factor(request.args)
+    recipe_data['method'] = [
+        scaler.scale_method_step(step, scale_factor)
+        for step in recipe_data['method']
+    ]
     if scale_factor:
         recipe_data['ingredients_blocks'] = list(map(
             lambda b: dict(
