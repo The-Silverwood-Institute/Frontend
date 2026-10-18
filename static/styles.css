@@ -139,6 +139,12 @@ span.scaled {
   background-color: rgba(255, 255, 0, 0.2);
 }
 
+p.scale-note {
+  clear: both;
+  margin: 0.4rem 0 0;
+  font-size: 0.9rem;
+}
+
 footer {
   margin-top: .5rem;
   text-align: center;

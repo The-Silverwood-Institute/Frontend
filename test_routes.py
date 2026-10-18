@@ -173,6 +173,7 @@ def test_recipe_strips_method_quantity_syntax(client):
     assert 'Add 250ml cold water and 2 tsp sugar.' in body
     assert '{250ml}' not in body
     assert 'class="scaled"' not in body
+    assert 'scaled ingredient quantities' not in body
 
 
 def test_recipe_scales_method_quantities(client):
@@ -190,6 +191,8 @@ def test_recipe_scales_method_quantities(client):
     assert '<span class="scaled">500ml</span>' in body
     assert '<span class="scaled">4 tsp</span>' in body
     assert '{250ml}' not in body
+    assert 'Highlighted text' in body
+    assert 'shows scaled ingredient quantities.' in body
 
 
 def test_homepage_backend_unavailable(flask_app, client):

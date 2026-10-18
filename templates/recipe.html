@@ -33,6 +33,9 @@
     <span id="wakelock" class="material-icons wakelock-unsupported" title="Prevent screen lock">visibility</span>
   </div>
 </div>
+{% if scale_factor != 1 %}
+  <p class="scale-note"><span class="scaled">Highlighted text</span> shows scaled ingredient quantities.</p>
+{% endif %}
 <div id="ingredients">
 {% for ingredients_block in recipe['ingredients_blocks'] %}
   <div class="ingredients-block">
