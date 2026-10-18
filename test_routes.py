@@ -87,6 +87,59 @@ def test_recipe_page(client):
     assert b'Chop onion' in response.data
 
 
+def _recipe_response(recipe):
+    response = MagicMock()
+    response.status_code = 200
+    response.json.return_value = recipe
+    response.raise_for_status.return_value = None
+    return response
+
+
+def test_recipe_renders_html_in_steps_and_notes(client):
+    recipe = {
+        **app.requests.get('http://backend/recipes/test-recipe').json(),
+    }
+    recipe['method'] = [
+        'Fry the <em>onions</em>.',
+        'Serve with <strong>rice</strong>.',
+    ]
+    recipe['notes'] = [
+        'See <a href="https://example.com/curry">this</a> powder.',
+    ]
+    recipe['dated_notes'] = [
+        {'date': '2022-02-20', 'note': 'Add <b>more</b> lime.'},
+    ]
+
+    with patch('app.requests.get', return_value=_recipe_response(recipe)):
+        response = client.get('/test-recipe')
+
+    assert response.status_code == 200
+    body = response.data.decode()
+    assert '<em>onions</em>' in body
+    assert '<strong>rice</strong>' in body
+    assert '<a href="https://example.com/curry">this</a>' in body
+    assert '2022-02-20: Add <b>more</b> lime.' in body
+    assert '&lt;em&gt;' not in body
+    assert '&lt;a href=' not in body
+
+
+def test_recipe_renders_html_in_a_single_note(client):
+    recipe = {
+        **app.requests.get('http://backend/recipes/test-recipe').json(),
+    }
+    recipe['notes'] = [
+        'Modified from <a href="https://example.com/dahl">this</a> recipe.',
+    ]
+    recipe['dated_notes'] = []
+
+    with patch('app.requests.get', return_value=_recipe_response(recipe)):
+        response = client.get('/test-recipe')
+
+    assert response.status_code == 200
+    body = response.data.decode()
+    assert '<p>Modified from <a href="https://example.com/dahl">this</a> recipe.</p>' in body
+
+
 def test_recipe_lowercase_redirect(client):
     response = client.get('/Test-Recipe')
     assert response.status_code == 301
