@@ -133,10 +133,11 @@ def test_contribute_page(client):
     body = response.data.decode()
     assert 'Add a recipe' in body
     assert 'name="passcode"' in body
-    assert 'value="VegetarianIsh"' in body
-    assert 'value="GlutenFree"' in body
-    assert 'Gluten-Free' in body
-    assert 'value="NeverEaten"' not in body
+    assert 'value="Vegetarian-ish"' in body
+    assert 'value="Gluten-Free"' in body
+    assert 'title="Can make vegetarian with minimal changes"' in body
+    assert 'value="AI"' not in body
+    assert 'value="Never Eaten"' not in body
     assert 'value="Popular"' not in body
     assert 'value="New"' not in body
     assert 'class="cf-turnstile"' in body

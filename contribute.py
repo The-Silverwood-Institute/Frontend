@@ -3,49 +3,17 @@
 The API owns validation, Scala generation, and opening the pull request.
 """
 
-TAG_GROUPS = (
-    ("Meal", (
-        ("Christmas", "Christmas"),
-        ("Pudding", "Pudding"),
-        ("Lunch", "Lunch"),
-        ("Baking", "Baking"),
-        ("NonMeal", "Not a Meal"),
-        ("Soup", "Soup"),
-    )),
-    ("Diet", (
-        ("Vegan", "Vegan"),
-        ("VeganIsh", "Vegan-ish"),
-        ("Vegetarian", "Vegetarian"),
-        ("VegetarianIsh", "Vegetarian-ish"),
-        ("Pescatarian", "Pescatarian"),
-    )),
-    ("Stephani", (
-        ("Stephani", "Stephani"),
-        ("StephaniIsh", "Stephani-ish"),
-        ("StephaniUnhealthy", "StephaniUnhealthy"),
-    )),
-    ("Vibe", (
-        ("ColdWeather", "Cold Weather"),
-        ("HotWeather", "Hot Weather"),
-        ("Stodge", "Stodge"),
-        ("Spicy", "Spicy"),
-    )),
-    ("Effort", (
-        ("Slow", "Slow"),
-        ("Quick", "Quick"),
-        ("Scales", "Scales"),
-        ("HighEffort", "High Effort"),
-        ("LowEffort", "Low Effort"),
-    )),
-    ("Good to know", (
-        ("Freezes", "Freezes"),
-        ("BetterNextDay", "Better Next Day"),
-    )),
+# Headings the contribute form already uses. Category order is the form order.
+_GROUP_HEADINGS = (
+    ("meal", "Meal"),
+    ("diet", "Diet"),
+    ("stephani", "Stephani"),
+    ("vibe", "Vibe"),
+    ("making", "Effort"),
+    ("practical", "Good to know"),
 )
 
-DIET_CHECKBOXES = (
-    ("GlutenFree", "Gluten-Free"),
-)
+_EXCLUDED_ENTRY_NAMES = {"AI"}
 
 _BLANK_INGREDIENT = {
     "name": "",
@@ -75,6 +43,82 @@ def _or_none(value):
 
 def _lines(value):
     return [line.strip() for line in _clean(value).splitlines() if line.strip()]
+
+
+def _entry_name(tag):
+    return _clean(tag.get("entry_name")) or _clean(tag.get("name"))
+
+
+def _superset(tag):
+    value = tag.get("superset")
+    if isinstance(value, str):
+        return value.strip() or None
+    return None
+
+
+def _option(tag):
+    entry_name = _entry_name(tag)
+    return {
+        "entry_name": entry_name,
+        "name": _clean(tag.get("name")) or entry_name,
+        "description": _clean(tag.get("description")) or None,
+    }
+
+
+def _selectable(tag):
+    if not isinstance(tag, dict):
+        return False
+    if tag.get("category") == "usage":
+        return False
+    entry_name = _entry_name(tag)
+    return bool(entry_name) and entry_name not in _EXCLUDED_ENTRY_NAMES
+
+
+def _split_diet(tags):
+    supersets = {name for name in (_superset(tag) for tag in tags) if name}
+    select = []
+    checkboxes = []
+    for tag in tags:
+        option = _option(tag)
+        on_chain = _superset(tag) is not None or option["entry_name"] in supersets
+        if on_chain:
+            select.append(option)
+        else:
+            checkboxes.append(option)
+    return select, checkboxes
+
+
+def tag_controls(catalog):
+    """Group a GET /tags catalog into the contribute form's controls.
+
+    Usage tags and AI are omitted. Diet tags on the superset chain become the
+    exclusive select; diet tags outside that chain stay checkboxes.
+    """
+    raw = catalog.get("tags") if isinstance(catalog, dict) else None
+    if not isinstance(raw, list):
+        raise ValueError("Tag catalog is missing its tags list")
+
+    by_category = {}
+    for tag in raw:
+        if _selectable(tag):
+            by_category.setdefault(tag.get("category") or "", []).append(tag)
+
+    diet_select, diet_checkboxes = _split_diet(by_category.pop("diet", []))
+    groups = []
+    for category, heading in _GROUP_HEADINGS:
+        if category == "diet":
+            if diet_select or diet_checkboxes:
+                groups.append((heading, diet_select))
+            continue
+        tags = by_category.pop(category, [])
+        if tags:
+            groups.append((heading, [_option(tag) for tag in tags]))
+
+    for category, tags in by_category.items():
+        if tags:
+            groups.append((category, [_option(tag) for tag in tags]))
+
+    return groups, diet_checkboxes
 
 
 def ingredient_rows(form):

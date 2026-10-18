@@ -56,6 +56,8 @@ backendMenuFetcher = cached_backend.CachedBackendCall(
     lambda: fetch_backend_json('recipes/'))
 backendManifest = cached_backend.CachedBackendCall(
     lambda: fetch_backend_json('manifest'))
+backendTags = cached_backend.CachedBackendCall(
+    lambda: fetch_backend_json('tags'))
 
 
 def fetchRecipeList():
@@ -64,6 +66,10 @@ def fetchRecipeList():
 
 def fetchApiManifest():
     return backendManifest.fetch_data()
+
+
+def fetchTags():
+    return backendTags.fetch_data()
 
 
 @app.context_processor
@@ -139,11 +145,12 @@ def random_recipe():
 
 
 def render_contribute(form=None, error=None, pr_url=None):
+    tag_groups, diet_checkboxes = contribute.tag_controls(fetchTags())
     return render_template(
         'contribute.html',
         recipeUrl='contribute',
-        tag_groups=contribute.TAG_GROUPS,
-        diet_checkboxes=contribute.DIET_CHECKBOXES,
+        tag_groups=tag_groups,
+        diet_checkboxes=diet_checkboxes,
         form=contribute.page_state(form),
         error=error,
         pr_url=pr_url,
