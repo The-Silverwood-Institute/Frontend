@@ -177,6 +177,11 @@ footer a:not(:hover) {
   margin-top: 1rem;
 }
 
+.contribute-form .required {
+  color: #c62828;
+  text-decoration: none;
+}
+
 .contribute-form .field span,
 .contribute-form legend,
 .tag-group h3 {
