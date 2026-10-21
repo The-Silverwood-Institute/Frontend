@@ -67,9 +67,27 @@ h2 {
   display: flow-root;
 }
 
-#ingredient-tools #copy {
+#ingredient-tools .material-symbols-outlined {
+  width: 24px;
+  overflow: hidden;
+  text-align: center;
+}
+
+#ingredient-tools #copy,
+#ingredient-tools #check {
   cursor: pointer;
-  border-radius: 50%;
+}
+
+#ingredient-tools #copy {
+  margin-right: 0px;
+}
+
+#ingredient-tools #check {
+  font-size: 18px;
+  margin: 3px 2px;
+  width: 20px;
+  border: 2px solid rgb(97, 97, 97);
+  border-radius: 4px;
 }
 
 #ingredient-tools #copy.is-copied {
@@ -133,6 +151,26 @@ h2 {
 
 div#ingredients span {
   padding: 0.2em;
+}
+
+#ingredients .ingredient-check {
+  display: none;
+}
+
+#ingredients.is-checking ul {
+  list-style: none;
+}
+
+#ingredients.is-checking .ingredient-check {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  margin: 0 0.35em 0 -1.4em;
+  vertical-align: middle;
+}
+
+#ingredients.is-checking .ingredient-check:checked + .ingredient {
+  text-decoration: line-through;
 }
 
 span.scaled {

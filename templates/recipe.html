@@ -27,6 +27,7 @@
     </span>
   {% endfor %}
   <div class="trailing-icons">
+    <span id="check" class="material-symbols-outlined" title="Check off ingredients">checklist</span>
     <a href="{{ recipe['edit'] }}">
       <span class="material-icons" title="Edit recipe on GitHub">edit</span>
     </a>
@@ -49,7 +50,10 @@
         {% set notes = (" (" + ingredient['notes'] + ")") if ingredient['notes'] else "" %}
         {% set ingredientText = ingredient['name'] + quantity + prep + notes %}
         {% set is_scaled = 'scaled' if ingredient.get('scaled') else '' %}
-      <li><span class="ingredient {{ is_scaled }}">{{ ingredientText }}</span></li>
+      <li>
+        <input type="checkbox" class="ingredient-check">
+        <span class="ingredient {{ is_scaled }}">{{ ingredientText }}</span>
+      </li>
       {% endfor %}
     </ul>
   </div>
