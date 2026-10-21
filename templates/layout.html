@@ -31,11 +31,12 @@
   {% endif %}
 
   <link rel="stylesheet" href="/static/material.indigo-deep_purple.min.css" />
-  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:FILL@0..1&icon_names=checklist,content_copy,edit,lock,menu,shuffle,visibility&display=block">
   <script defer src="/static/material.min.js"></script>
   <link rel="stylesheet" href="/static/styles.css?v={{ config.frontendVersion }}" />
   <script defer src="/static/search.js?v={{ config.frontendVersion }}"></script>
   <script defer src="/static/copy.js?v={{ config.frontendVersion }}"></script>
+  <script defer src="/static/check.js?v={{ config.frontendVersion }}"></script>
   <script defer src="/static/wakelock.js?v={{ config.frontendVersion }}"></script>
   <script defer src="/static/pi.js?v={{ config.frontendVersion }}"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -57,7 +58,7 @@
     <span class="mdl-layout-title">
       <a href="/">Recibase</a>
     </span>
-    <span class="material-icons random-recipe">
+    <span class="material-symbols-outlined random-recipe">
       <a href="/random">
         shuffle
       </a>

@@ -38,6 +38,17 @@ h2 {
   margin-top: 4px;
 }
 
+/* MDL still inserts the legacy menu codepoint. Draw it with Material Symbols. */
+.mdl-layout__drawer-button > .material-icons {
+  font-family: "Material Symbols Outlined";
+  font-size: 0;
+}
+
+.mdl-layout__drawer-button > .material-icons::before {
+  content: "menu";
+  font-size: 24px;
+}
+
 .mdl-navigation.mdl-navigation .mdl-navigation__link {
   padding: 10px 40px;
 }
@@ -82,12 +93,15 @@ h2 {
   margin-right: 0px;
 }
 
-#ingredient-tools #check {
-  font-size: 18px;
-  margin: 3px 2px;
+#ingredient-tools .trailing-icons .material-symbols-outlined {
+  font-size: 20px;
   width: 20px;
   border: 2px solid rgb(97, 97, 97);
   border-radius: 4px;
+}
+
+#ingredient-tools .icon-filled {
+  font-variation-settings: "FILL" 1;
 }
 
 #ingredient-tools #copy.is-copied {
@@ -121,7 +135,7 @@ h2 {
 }
 
 #ingredient-tools .trailing-icons span {
-  margin: 2px 0px;
+  margin: 2px;
 }
 
 #ingredient-tools a {
