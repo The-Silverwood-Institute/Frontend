@@ -35,7 +35,7 @@ def resolve_deployed_version(environ=None):
     return value if COMMIT_RE.fullmatch(value) else 'latest'
 
 
-backendBaseUrl = os.getenv('BACKEND_URL', "http://localhost:8081/")
+backendBaseUrl = os.getenv('BACKEND_URL', "https://api.reciba.se/")
 frontendVersion = resolve_deployed_version()
 
 
