@@ -1,8 +1,8 @@
 const wakelockEl = document.getElementById("wakelock");
 const iconWakelockActive = 'lock';
 const iconWakelockInactive = 'visibility';
-const textWakelockActive = 'Remove screen lock prevention';
-const textWakelockInactive = 'Remove screen lock prevention';
+const textWakelockActive = 'Re-enable screen locking';
+const textWakelockInactive = 'Stop screen from locking';
 
 if ("wakeLock" in navigator & wakelockEl != null) {
     wakelockEl.classList.remove("wakelock-unsupported");
