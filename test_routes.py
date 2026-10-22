@@ -18,7 +18,7 @@ def test_manifest(client):
     assert response.content_type == 'text/json'
     assert json.loads(response.data) == {
         'version': app.frontendVersion,
-        'apiUrl': 'http://localhost:8081/',
+        'apiUrl': 'https://api.reciba.se/',
     }
 
 
@@ -59,7 +59,7 @@ def test_debug_page(client):
     assert 'https://github.com/The-Silverwood-Institute/Recibase">Recibase' in body
     assert 'https://github.com/The-Silverwood-Institute/Recibase/commit/deadbeef' in body
     assert f'https://github.com/The-Silverwood-Institute/Frontend/commit/{app.frontendVersion}' in body
-    assert 'http://localhost:8081/' in body
+    assert 'https://api.reciba.se/' in body
     assert '>1<' in body
     assert 'Menu cache' in body
     assert 'Version cache' in body
