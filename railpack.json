@@ -1,5 +1,8 @@
 {
   "$schema": "https://schema.railpack.com",
+  "deploy": {
+    "aptPackages": ["ca-certificates=20250419~deb12u2"]
+  },
   "steps": {
     "install": {
       "commands": [
